@@ -1,25 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.cpp                                           :+:      :+:    :+:   */
+/*   Fixed.cpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: torinoue <torinoue@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/08/11 19:48:06 by torinoue          #+#    #+#             */
-/*   Updated: 2025/08/11 19:54:22 by torinoue         ###   ########.fr       */
+/*   Created: 2025/08/11 19:48:18 by torinoue          #+#    #+#             */
+/*   Updated: 2025/08/11 19:54:12 by torinoue         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <iostream>
-#include "Fixed.hpp"
+#include "fixed.Hpp"
 
-int main( void ) {
-Fixed a;
-Fixed b( a );
-Fixed c;
-c = b;
-std::cout << a.getRawBits() << std::endl;
-std::cout << b.getRawBits() << std::endl;
-std::cout << c.getRawBits() << std::endl;
-return 0;
+class Fixed{
+
+	public:
+		Fixed();
+		Fixed(std::string num);
+		Fixed(Fixed & other);
+		int getRawBits( void ) const;
+		void setRawBits( int const raw );
+
+	private:
+		int sisuBu;
+		static const syousuBu;
 }
+
+

@@ -52,32 +52,37 @@ Fixed::Fixed(const int integer): _value(integer << _fractionalBits)
 
 
 // Fixed::Fixed(const float floatingPointNumber): _value(static_cast<int>(roundf( floatingPointNumber * pow(2, _fractionalBits))))
-Fixed::Fixed(const float floatingPointNumber): _value(static_cast<int>(roundf(floatingPointNumber * (1 << _fractionalBits))))
+Fixed::Fixed(const float floatingPointNumber)
 {
 	std::cerr << ANSI_COLOR_YELLOW << "Fixed Float Constructor called" << ANSI_COLOR_RESET << std::endl;
 	std::cerr << ANSI_COLOR_YELLOW << "			floatingPointNumber=" << floatingPointNumber << ANSI_COLOR_RESET << std::endl;
 	
-	// 事前範囲チェック（オーバーフロー前に判定）
-	const float MAX_SAFE_FLOAT = static_cast<float>(INT_MAX) / (1 << _fractionalBits);
-	const float MIN_SAFE_FLOAT = static_cast<float>(INT_MIN) / (1 << _fractionalBits);
+	// roundf結果をlong long型で受け取ってオーバーフローチェック
+	long long scaled_result = static_cast<long long>(roundf(floatingPointNumber * (1 << _fractionalBits)));
 	
-	std::cerr << ANSI_COLOR_YELLOW << "----MAX_SAFE_FLOAT=" << MAX_SAFE_FLOAT << ANSI_COLOR_RESET << std::endl;
-	// std::cerr << ANSI_COLOR_YELLOW << "----MIN_SAFE_FLOAT=" << MIN_SAFE_FLOAT << ANSI_COLOR_RESET << std::endl;
-	// INT_MAX/MIN チェック（事前）
-	if (floatingPointNumber > MAX_SAFE_FLOAT) {
-		std::cerr << ANSI_COLOR_RED << "		Warning: Float " << floatingPointNumber 
-				  << " exceeds maximum safe value " << MAX_SAFE_FLOAT
-				  << ". Overflow will occur!" << ANSI_COLOR_RESET << std::endl;
+	std::cerr << ANSI_COLOR_BLUE << "			scaled_result (long long)=" << scaled_result << ANSI_COLOR_RESET << std::endl;
+	
+	// INT_MAX/MIN範囲チェック
+	if (scaled_result > INT_MAX) {
+		std::cerr << ANSI_COLOR_RED << "		Warning: Rounded result " << scaled_result 
+				  << " exceeds INT_MAX (" << INT_MAX << "). Overflow occurred!" << ANSI_COLOR_RESET << std::endl;
+		_value = static_cast<int>(scaled_result);
 	}
-	else if (floatingPointNumber < MIN_SAFE_FLOAT) {
-		std::cerr << ANSI_COLOR_RED << "		Warning: Float " << floatingPointNumber 
-				  << " is below minimum safe value " << MIN_SAFE_FLOAT
-				  << ". Underflow will occur!" << ANSI_COLOR_RESET << std::endl;
+	else if (scaled_result < INT_MIN) {
+		std::cerr << ANSI_COLOR_RED << "		Warning: Rounded result " << scaled_result 
+				  << " is below INT_MIN (" << INT_MIN << "). Underflow occurred!" << ANSI_COLOR_RESET << std::endl;
+		_value = static_cast<int>(scaled_result);
 	}
-	float scaled_value = floatingPointNumber * (1 << _fractionalBits);
-	int int_scaled_value = static_cast<int>(scaled_value);
-	std::cerr << ANSI_COLOR_BLUE << "			scaled_value=" << scaled_value << ANSI_COLOR_RESET << std::endl;
-	std::cerr << ANSI_COLOR_BLUE << "			int_scaled_value=" << int_scaled_value << ANSI_COLOR_RESET << std::endl;
+	else {
+		_value = static_cast<int>(scaled_result);
+	}
+	if (scaled_result > 0) {
+		std::cerr << ANSI_COLOR_BLUE << "			Difference from INT_MAX  =" << INT_MAX - scaled_result << std::endl;
+	} else {
+		std::cerr << ANSI_COLOR_BLUE << "			Difference from INT_MIN  =" << scaled_result - INT_MIN << std::endl;
+	}	
+	std::cerr << ANSI_COLOR_BLUE << "			final _value=" << _value << ANSI_COLOR_RESET << std::endl;
+
 }
 		
 Fixed::~Fixed()

@@ -1,4 +1,4 @@
-NAME = fixed_00
+NAME = fixed_00_orthodox
 CXX = c++
 CXXFLAGS = -Wall -Wextra -Werror -std=c++98
 SRCS = 	main.cpp \

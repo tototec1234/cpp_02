@@ -61,10 +61,8 @@ Fixed::Fixed(const float floatingPointNumber): _value(static_cast<int>(roundf(fl
 	const float MAX_SAFE_FLOAT = static_cast<float>(INT_MAX) / (1 << _fractionalBits);
 	const float MIN_SAFE_FLOAT = static_cast<float>(INT_MIN) / (1 << _fractionalBits);
 	
-	// フロート精度を考慮した安全範囲（桁落ち防止）
-	const float PRECISION_MAX_FLOAT = 65536.0f;    // 2^16 (floatで完全に正確)
-	const float PRECISION_MIN_FLOAT = -65536.0f;   // -2^16
-	
+	std::cerr << ANSI_COLOR_YELLOW << "----MAX_SAFE_FLOAT=" << MAX_SAFE_FLOAT << ANSI_COLOR_RESET << std::endl;
+	// std::cerr << ANSI_COLOR_YELLOW << "----MIN_SAFE_FLOAT=" << MIN_SAFE_FLOAT << ANSI_COLOR_RESET << std::endl;
 	// INT_MAX/MIN チェック（事前）
 	if (floatingPointNumber > MAX_SAFE_FLOAT) {
 		std::cerr << ANSI_COLOR_RED << "		Warning: Float " << floatingPointNumber 
@@ -76,20 +74,6 @@ Fixed::Fixed(const float floatingPointNumber): _value(static_cast<int>(roundf(fl
 				  << " is below minimum safe value " << MIN_SAFE_FLOAT
 				  << ". Underflow will occur!" << ANSI_COLOR_RESET << std::endl;
 	}
-	
-	// 精度安全範囲チェック（桁落ち防止）
-	if (floatingPointNumber > PRECISION_MAX_FLOAT) {
-		std::cerr << ANSI_COLOR_MAGENTA << "		Precision Warning: Float " << floatingPointNumber 
-				  << " exceeds safe precision limit (" << PRECISION_MAX_FLOAT 
-				  << "). Precision loss may occur!" << ANSI_COLOR_RESET << std::endl;
-	}
-	else if (floatingPointNumber < PRECISION_MIN_FLOAT) {
-		std::cerr << ANSI_COLOR_MAGENTA << "		Precision Warning: Float " << floatingPointNumber 
-				  << " is below safe precision limit (" << PRECISION_MIN_FLOAT 
-				  << "). Precision loss may occur!" << ANSI_COLOR_RESET << std::endl;
-	}
-	
-	// デバッグ用：変換後の値表示
 	float scaled_value = floatingPointNumber * (1 << _fractionalBits);
 	int int_scaled_value = static_cast<int>(scaled_value);
 	std::cerr << ANSI_COLOR_BLUE << "			scaled_value=" << scaled_value << ANSI_COLOR_RESET << std::endl;

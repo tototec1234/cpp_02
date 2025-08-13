@@ -28,35 +28,40 @@ int main( void )
 	// }
 	{
 		Fixed a;
-		// Fixed const b( 10 );
-		// Fixed const c( 42.42f );
-		// Fixed const d( b );
-
-		// a = Fixed( 1234.4321f );
+		// フロートコンストラクタのテスト
 		a = Fixed( 1.499f );
 		Fixed b = Fixed( 1.501f );
-		// Fixed c = Fixed( 1.498046875f );
-		// Fixed d = Fixed( 100000001.0f);
-		// Fixed e = Fixed( 123456789.0f);
-		// Fixed f = Fixed( 16777217.0f);
 		Fixed c = Fixed( 1.498046875f );
-		Fixed d = Fixed( 100000001);
-		Fixed e = Fixed( 123456789);
-		Fixed f = Fixed( 16777217);
+		
+		// 精度差をテストするために特定の内部値を設定
+		Fixed d, e, f;
+		
+		/*
+				d.setRawBits(16777215);  // 2^24-1 (フロート精度限界)
+		e.setRawBits(16777216);  // 2^24 (フロート精度限界)  
+		f.setRawBits(16777217);  // 2^24+1 (フロート精度超過)
+*/
+		d = Fixed(-8388609);  // 2^24-1 (フロート精度限界)
+		e = Fixed(8388607);  // 2^24 (フロート精度限界)  
+		f = Fixed(8388608);  //  (2^31-1) / 256
+
+		std::cout << "=== フロートコンストラクタ ===" << std::endl;
 		std::cout << "a is " << a << std::endl;
 		std::cout << "b is " << b << std::endl;
 		std::cout << "c is " << c << std::endl;
+		
+		std::cout << "\n=== 精度差テスト（setRawBits使用） ===" << std::endl;
 		std::cout << "d is " << d << std::endl;	
 		std::cout << "e is " << e << std::endl;
 		std::cout << "f is " << f << std::endl;
-		
 
-		// std::cout << "d is " << d << std::endl;
 
-		// std::cout << "a is " << a.toInt() << " as integer" << std::endl;
-		// std::cout << "b is " << b.toInt() << " as integer" << std::endl;
-		// std::cout << "c is " << c.toInt() << " as integer" << std::endl;
-		// std::cout << "d is " << d.toInt() << " as integer" << std::endl;
+		std::cout << "a is " << a.toInt() << " as integer" << std::endl;
+		std::cout << "b is " << b.toInt() << " as integer" << std::endl;
+		std::cout << "c is " << c.toInt() << " as integer" << std::endl;
+		std::cout << "d is " << d.toInt() << " as integer" << std::endl;
+		std::cout << "e is " << e.toInt() << " as integer" << std::endl;
+		std::cout << "f is " << f.toInt() << " as integer" << std::endl;
 	}
 	return 0;
 }
@@ -98,4 +103,9 @@ static_cast<float>(16777217) / static_cast<float>(256)
 
 static_cast<float>(16777217) / 256
 → 65536.0
+*/
+
+/*
+整数コンストラクタでは値を8ビット左シフトするので、入力できる整数は約 -32,768 から 32,767 の範囲
+
 */

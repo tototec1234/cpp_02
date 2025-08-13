@@ -6,7 +6,7 @@
 /*   By: toruinoue <toruinoue@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/11 19:48:18 by torinoue          #+#    #+#             */
-/*   Updated: 2025/08/13 18:35:59 by toruinoue        ###   ########.fr       */
+/*   Updated: 2025/08/13 19:53:30 by toruinoue        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,12 +20,25 @@ Fixed::Fixed() : _value(0)
     std::cerr << ANSI_COLOR_YELLOW << "Fixed Default Constructor called" << ANSI_COLOR_RESET << std::endl;
 }
 
-Fixed::Fixed(const Fixed & other)
+Fixed::Fixed(const Fixed & src)
 {
     std::cerr << ANSI_COLOR_YELLOW << "Fixed Copy Constructor called" << ANSI_COLOR_RESET << std::endl;
-    *this = other;
+    *this = src;
 }
 
+Fixed::Fixed(const int integer)
+{
+	std::cerr << ANSI_COLOR_YELLOW << "Fixed Integer Constructor called" << ANSI_COLOR_RESET << std::endl;
+	this->_value = integer << _fractionalBits;
+}
+
+
+Fixed::Fixed(const float floatingPointNumber)
+{
+	std::cerr << ANSI_COLOR_YELLOW << "Fixed Float Constructor called" << ANSI_COLOR_RESET << std::endl;
+	this->_value = static_cast<int>(roundf(floatingPointNumber * (1 << _fractionalBits)));
+}
+		
 Fixed::~Fixed()
 {
     std::cerr << ANSI_COLOR_RED << "Fixed Destructor called" << ANSI_COLOR_RESET << std::endl;
@@ -52,4 +65,18 @@ Fixed &Fixed::operator=(const Fixed &src) {
 	return *this;
 }
 
+float	Fixed::toFloat(void) const
+{
+	return (this->_value * pow(2,-_fractionalBits));
+}
 
+
+int		Fixed::toInt(void) const
+{
+	return (this->_value >> _fractionalBits);
+}
+
+std::ostream &operator<<(std::ostream &str, const Fixed &fixed)
+{
+	return(str << fixed.toFloat());
+}

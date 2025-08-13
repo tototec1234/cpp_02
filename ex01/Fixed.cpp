@@ -6,7 +6,7 @@
 /*   By: toruinoue <toruinoue@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/11 19:48:18 by torinoue          #+#    #+#             */
-/*   Updated: 2025/08/13 19:53:30 by toruinoue        ###   ########.fr       */
+/*   Updated: 2025/08/13 20:56:59 by toruinoue        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,17 +26,19 @@ Fixed::Fixed(const Fixed & src)
     *this = src;
 }
 
-Fixed::Fixed(const int integer)
+Fixed::Fixed(const int integer): _value(integer << _fractionalBits)
 {
 	std::cerr << ANSI_COLOR_YELLOW << "Fixed Integer Constructor called" << ANSI_COLOR_RESET << std::endl;
-	this->_value = integer << _fractionalBits;
 }
 
 
-Fixed::Fixed(const float floatingPointNumber)
+// Fixed::Fixed(const float floatingPointNumber): _value(static_cast<int>(roundf( floatingPointNumber * pow(2, _fractionalBits))))
+Fixed::Fixed(const float floatingPointNumber): _value(static_cast<int>(roundf(floatingPointNumber * (1 << _fractionalBits))))
 {
 	std::cerr << ANSI_COLOR_YELLOW << "Fixed Float Constructor called" << ANSI_COLOR_RESET << std::endl;
-	this->_value = static_cast<int>(roundf(floatingPointNumber * (1 << _fractionalBits)));
+	//value * ft_pow(2, this->_frac
+	// _value = static_cast<int>(floatingPointNumber * pow(2, _fractionalBits));
+	// this->_value = static_cast<int>(roundf(floatingPointNumber * (1 << _fractionalBits)));
 }
 		
 Fixed::~Fixed()
@@ -67,7 +69,13 @@ Fixed &Fixed::operator=(const Fixed &src) {
 
 float	Fixed::toFloat(void) const
 {
-	return (this->_value * pow(2,-_fractionalBits));
+	// return (this->_value * pow(2,-_fractionalBits));
+	// return (static_cast<float>(this->_value) / (1 << _fractionalBits));
+	// return (static_cast<float>(this->_value) / static_cast<float>(1 << _fractionalBits));
+	return (static_cast<float>(this->_value) / (1 << _fractionalBits));
+	// return static_cast<float>(this->_value) / static_cast<float>(1 << _fractionalBits);
+
+	// return (static_cast<float>(this->_value) / pow(2, _fractionalBits));
 }
 
 

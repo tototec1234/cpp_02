@@ -3,27 +3,53 @@
 /*                                                        :::      ::::::::   */
 /*   Fixed.cpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: torinoue <torinoue@student.42.fr>          +#+  +:+       +#+        */
+/*   By: toruinoue <toruinoue@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/11 19:48:18 by torinoue          #+#    #+#             */
-/*   Updated: 2025/08/11 19:54:12 by torinoue         ###   ########.fr       */
+/*   Updated: 2025/08/13 18:35:59 by toruinoue        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "fixed.Hpp"
+#include "AnsiColor.hpp"
+#include "Fixed.hpp"
 
-class Fixed{
+const int Fixed::_fractionalBits = 8;
 
-	public:
-		Fixed();
-		Fixed(std::string num);
-		Fixed(Fixed & other);
-		int getRawBits( void ) const;
-		void setRawBits( int const raw );
+Fixed::Fixed() : _value(0)
+{
+    std::cerr << ANSI_COLOR_YELLOW << "Fixed Default Constructor called" << ANSI_COLOR_RESET << std::endl;
+}
 
-	private:
-		int sisuBu;
-		static const syousuBu;
+Fixed::Fixed(const Fixed & other)
+{
+    std::cerr << ANSI_COLOR_YELLOW << "Fixed Copy Constructor called" << ANSI_COLOR_RESET << std::endl;
+    *this = other;
+}
+
+Fixed::~Fixed()
+{
+    std::cerr << ANSI_COLOR_RED << "Fixed Destructor called" << ANSI_COLOR_RESET << std::endl;
+}
+
+
+int Fixed::getRawBits( void ) const
+{
+	std::cout << "getRawBits member function called" << std::endl;
+	return (this->_value);
+}
+
+void Fixed::setRawBits( int const raw )
+{
+	std::cout << "setRawBits member function called" << std::endl;
+	this->_value = raw;
+}
+
+Fixed &Fixed::operator=(const Fixed &src) {
+	std::cout << "Fixed Copy Assignment Operator called" << std::endl;
+	if (this != &src) {
+		this->_value = src.getRawBits();
+	}
+	return *this;
 }
 
 

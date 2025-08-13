@@ -1,0 +1,12 @@
+Exercise 03: BSP
+Exercise 03
+BSP
+Turn-in directory: ex03/
+Files to turn in: Makefile, main.cpp, Fixed.{h, hpp}, Fixed.cpp,
+Point.{h, hpp}, Point.cpp, bsp.cpp
+Allowed functions: roundf (from <cmath>)
+Now that you have a functional Fixed class, it would be nice to use it.
+Implement a function that indicates whether a point is inside a triangle or not. Very
+useful, isn’t it?
+BSP stands for Binary Space Partitioning. You are welcome. :)
+You can pass this module without completing exercise 03.

@@ -3,29 +3,31 @@
 /*                                                        :::      ::::::::   */
 /*   Fixed.hpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: torinoue <torinoue@student.42.fr>          +#+  +:+       +#+        */
+/*   By: toruinoue <toruinoue@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/11 19:48:18 by torinoue          #+#    #+#             */
-/*   Updated: 2025/08/11 19:52:53 by torinoue         ###   ########.fr       */
+/*   Updated: 2025/08/13 18:35:59 by toruinoue        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef FIXED_HPP
 # define FIXED_HPP
+# include <iostream>
+# include "AnsiColor.hpp"
 
-class Fixed{
-
+class Fixed
+{
 	public:
 		Fixed();
-		Fixed(std::string num);
-		Fixed(Fixed & other);
+		Fixed(const Fixed & other);
+		~Fixed();
 		int getRawBits( void ) const;
 		void setRawBits( int const raw );
+		Fixed &operator=(const Fixed &src);
 
 	private:
-		int sisuBu;
-		static const syousuBu;
-}
-
+		int _value;
+		static const int _fractionalBits;
+};
 
 #endif

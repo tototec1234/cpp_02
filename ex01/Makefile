@@ -1,7 +1,8 @@
-NAME = sed_is_for_losers
+NAME = fixed_01_useful
 CXX = c++
 CXXFLAGS = -Wall -Wextra -Werror -std=c++98
-SRCS = main.cpp
+SRCS = 	main.cpp \
+		Fixed.cpp \
 
 MAKE = make
 OBJS = $(SRCS:.cpp=.o)
@@ -26,7 +27,7 @@ run: test
 
 test: re
 	@echo "Running tests..."
-	./$(NAME) test.txt ll L...L
+	./$(NAME)
 	$(MAKE) fclean
 
 .PHONY: all clean fclean re test run

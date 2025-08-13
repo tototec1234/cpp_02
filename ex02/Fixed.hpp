@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Fixed.hpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: torinoue <torinoue@student.42.fr>          +#+  +:+       +#+        */
+/*   By: toruinoue <toruinoue@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/11 19:48:18 by torinoue          #+#    #+#             */
-/*   Updated: 2025/08/11 19:52:53 by torinoue         ###   ########.fr       */
+/*   Updated: 2025/08/13 17:59:00 by toruinoue        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ class Fixed{
 		void setRawBits( int const raw );
 
 	private:
-		int sisuBu;
+		int _value;
 		static const syousuBu;
 }
 

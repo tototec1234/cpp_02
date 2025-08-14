@@ -6,7 +6,7 @@
 /*   By: toruinoue <toruinoue@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/11 19:48:18 by torinoue          #+#    #+#             */
-/*   Updated: 2025/08/14 20:13:04 by toruinoue        ###   ########.fr       */
+/*   Updated: 2025/08/14 22:14:25 by toruinoue        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 #include "Fixed.hpp"
 #include <iomanip>
 #include <climits>
+#include <cmath>
 
 const int Fixed::_fractionalBits = 8;
 
@@ -106,6 +107,42 @@ const Fixed &Fixed::max(const Fixed &a, const Fixed &b){
 	return (a._value < b._value ? b : a);
 }
 
+/* Special value generation functions */
+Fixed Fixed::getNaN() {
+	Fixed result;
+	result._value = NAN_VALUE;
+	return result;
+}
+
+Fixed Fixed::getPositiveInfinity() {
+	Fixed result;
+	result._value = POSITIVE_INF_VALUE;
+	return result;
+}
+
+Fixed Fixed::getNegativeInfinity() {
+	Fixed result;
+	result._value = NEGATIVE_INF_VALUE;
+	return result;
+}
+
+/* Special value detection functions */
+bool Fixed::isNaN() const {
+	return _value == NAN_VALUE;
+}
+
+bool Fixed::isInfinite() const {
+	return _value == POSITIVE_INF_VALUE || _value == NEGATIVE_INF_VALUE;
+}
+
+bool Fixed::isPositiveInfinity() const {
+	return _value == POSITIVE_INF_VALUE;
+}
+
+bool Fixed::isNegativeInfinity() const {
+	return _value == NEGATIVE_INF_VALUE;
+}
+
 // Overloaded Operators
 	/* Assignment operator */
 Fixed &Fixed::operator =(const Fixed &src){
@@ -153,24 +190,100 @@ bool	Fixed::operator !=(const Fixed &other) const{
 
 /* The 4 arithmetic operators: +, -, *, and /. */
 Fixed	Fixed::operator +(const Fixed &other) const{
-	return (Fixed(this->toFloat() + other.toFloat()));
+	// オーバーフローチェック付きの加算
+	long long result = static_cast<long long>(this->_value) + static_cast<long long>(other._value);
+	
+	if (result > INT_MAX) {
+		std::cerr << ANSI_COLOR_RED << "Warning: Addition result exceeds INT_MAX. Overflow occurred!" << ANSI_COLOR_RESET << std::endl;
+		return Fixed();
+	}
+	else if (result < INT_MIN) {
+		std::cerr << ANSI_COLOR_RED << "Warning: Addition result is below INT_MIN. Underflow occurred!" << ANSI_COLOR_RESET << std::endl;
+		return Fixed();
+	}
+	
+	Fixed resultFixed;
+	resultFixed.setRawBits(static_cast<int>(result));
+	return resultFixed;
 }
 
 Fixed	Fixed::operator -(const Fixed &other) const{
-	return (Fixed(this->toFloat() - other.toFloat()));
+	// オーバーフローチェック付きの減算
+	long long result = static_cast<long long>(this->_value) - static_cast<long long>(other._value);
+	
+	if (result > INT_MAX) {
+		std::cerr << ANSI_COLOR_RED << "Warning: Subtraction result exceeds INT_MAX. Overflow occurred!" << ANSI_COLOR_RESET << std::endl;
+		return Fixed();
+	}
+	else if (result < INT_MIN) {
+		std::cerr << ANSI_COLOR_RED << "Warning: Subtraction result is below INT_MIN. Underflow occurred!" << ANSI_COLOR_RESET << std::endl;
+		return Fixed();
+	}
+	
+	Fixed resultFixed;
+	resultFixed.setRawBits(static_cast<int>(result));
+	return resultFixed;
 }
 
 Fixed	Fixed::operator *(const Fixed &other) const{
-	return (Fixed(this->toFloat() * other.toFloat()));
+	// より安全な整数演算を使用してオーバーフローを防ぐ
+	long long result = static_cast<long long>(this->_value) * static_cast<long long>(other._value);
+	
+	// 固定小数点の乗算では、結果を右シフトして正しいスケールに戻す必要がある
+	result >>= _fractionalBits;
+	
+	// オーバーフローチェック
+	if (result > INT_MAX) {
+		std::cerr << ANSI_COLOR_RED << "Warning: Multiplication result exceeds INT_MAX. Overflow occurred!" << ANSI_COLOR_RESET << std::endl;
+		return Fixed();  // 0を返す
+	}
+	else if (result < INT_MIN) {
+		std::cerr << ANSI_COLOR_RED << "Warning: Multiplication result is below INT_MIN. Underflow occurred!" << ANSI_COLOR_RESET << std::endl;
+		return Fixed();  // 0を返す
+	}
+	
+	Fixed resultFixed;
+	resultFixed.setRawBits(static_cast<int>(result));
+	return resultFixed;
 }
 
 Fixed	Fixed::operator /(const Fixed &other) const{
-	if (other.toFloat() == 0.0f)
-	{
-		std::cerr << ANSI_COLOR_RED << "Error: Division by zero!" << ANSI_COLOR_RESET << std::endl;
-		return (Fixed(0));
+	// 特別な値の処理
+	if (this->isNaN() || other.isNaN()) {
+		return getNaN();
 	}
-	return (Fixed(this->toFloat() / other.toFloat()));
+	
+	// ゼロ除算の処理
+	if (other.toFloat() == 0.0f) {
+		std::cerr << ANSI_COLOR_RED << "Error: Division by zero!" << ANSI_COLOR_RESET << std::endl;
+		
+		// 0/0 = NaN
+		if (this->toFloat() == 0.0f) {
+			return getNaN();
+		}
+		// x/0 = +∞ or -∞
+		return (this->toFloat() > 0.0f) ? getPositiveInfinity() : getNegativeInfinity();
+	}
+	
+	// 通常の除算処理
+	float result = this->toFloat() / other.toFloat();
+	
+	// 結果が表現可能範囲を超える場合の検出
+	const float MAX_REPRESENTABLE = static_cast<float>(INT_MAX >> _fractionalBits);
+	const float MIN_REPRESENTABLE = static_cast<float>(INT_MIN >> _fractionalBits);
+	
+	if (result > MAX_REPRESENTABLE) {
+		std::cerr << ANSI_COLOR_RED << "Warning: Division result exceeds representable range! Returning +∞" 
+				  << ANSI_COLOR_RESET << std::endl;
+		return getPositiveInfinity();
+	}
+	else if (result < MIN_REPRESENTABLE) {
+		std::cerr << ANSI_COLOR_RED << "Warning: Division result exceeds representable range! Returning -∞" 
+				  << ANSI_COLOR_RESET << std::endl;
+		return getNegativeInfinity();
+	}
+	
+	return Fixed(result);
 }
 
 		/* The 4 increment/decrement (pre-increment and post-increment, pre-decrement and
@@ -178,11 +291,13 @@ post-decrement) operators, which will increase or decrease the fixed-point value
 the smallest representable ϵ, such that 1 + ϵ > 1. */
 
 Fixed	&Fixed::operator ++(void){
+	// std::cout << ANSI_COLOR_YELLOW << "Fixed Pre-Increment Operator called" << ANSI_COLOR_RESET << std::endl;
 	this->_value++;
 	return (*this);
 }
 
 Fixed	Fixed::operator ++(int){
+	// std::cout << ANSI_COLOR_YELLOW << "Fixed Post-Increment Operator called" << ANSI_COLOR_RESET << std::endl;
 	Fixed temp(*this);
 	this->_value++;
 	return (temp);
@@ -216,7 +331,7 @@ tempは値として返される（参照ではない）
    // 3. toFloat()がtempに対して呼ばれる
    // 4. 文全体の評価完了後にtempが破棄される
 Fixed	Fixed::operator --(int){
-	std::cout << ANSI_COLOR_YELLOW << "Fixed Post-Decrement Operator called" << ANSI_COLOR_RESET << std::endl;
+	// std::cout << ANSI_COLOR_YELLOW << "Fixed Post-Decrement Operator called" << ANSI_COLOR_RESET << std::endl;
 	Fixed temp(*this);
 	this->_value--;
 	return (temp);

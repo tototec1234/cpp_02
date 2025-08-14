@@ -39,6 +39,17 @@ class Fixed
 		static Fixed &max(Fixed &a, Fixed &b);
 		static const Fixed &min(const Fixed &a, const Fixed &b);
 		static const Fixed &max(const Fixed &a, const Fixed &b);
+		
+		/* Special value generation functions */
+		static Fixed getNaN();
+		static Fixed getPositiveInfinity();
+		static Fixed getNegativeInfinity();
+		
+		/* Special value detection functions */
+		bool isNaN() const;
+		bool isInfinite() const;
+		bool isPositiveInfinity() const;
+		bool isNegativeInfinity() const;
 
 
 	// Overloaded Operators
@@ -69,6 +80,11 @@ the smallest representable ϵ, such that 1 + ϵ > 1. */
 	private:
 		int _value;
 		static const int _fractionalBits;
+		
+		/* Special values for NaN and infinity representation */
+		static const int NAN_VALUE = INT_MIN;
+		static const int POSITIVE_INF_VALUE = INT_MAX;
+		static const int NEGATIVE_INF_VALUE = INT_MIN + 1;
 };
 
 

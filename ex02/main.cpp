@@ -13,6 +13,7 @@
 #include "AnsiColor.hpp"
 #include <iostream>
 #include "Fixed.hpp"
+#include <iomanip> // 浮動小数点数の精度を制御するために追加
 
 int main( void )
 {
@@ -44,42 +45,71 @@ int main( void )
 	// 	std::cout << "c is " << c.toInt() << " as integer" << std::endl;
 	// 	std::cout << "d is " << d.toInt() << " as integer" << std::endl;
 	// }
-	{
-		Fixed a(10.5f);
-		Fixed b(5.25f);
-		Fixed c(5.25f);
+	// {
+		// {
+		// Fixed a(10.5f);
+		// Fixed b(5.25f);
+		// Fixed c(5.25f);
 
-		std::cout << "比較演算子のテスト:" << std::endl;
-		std::cout << "a > b: " << (a > b) << std::endl;
-		std::cout << "a < b: " << (a < b) << std::endl;
-		std::cout << "b >= c: " << (b >= c) << std::endl;
-		std::cout << "a <= b: " << (a <= b) << std::endl;
-		std::cout << "b == c: " << (b == c) << std::endl;
-		std::cout << "a != b: " << (a != b) << std::endl;
+		// std::cout << "比較演算子のテスト:" << std::endl;
+		// std::cout << "a > b: " << (a > b) << std::endl;
+		// std::cout << "a < b: " << (a < b) << std::endl;
+		// std::cout << "b >= c: " << (b >= c) << std::endl;
+		// std::cout << "a <= b: " << (a <= b) << std::endl;
+		// std::cout << "b == c: " << (b == c) << std::endl;
+		// std::cout << "a != b: " << (a != b) << std::endl;
 
-		std::cout << "\n算術演算子のテスト:" << std::endl;
-		std::cout << "a + b = " << (a + b) << std::endl;
-		std::cout << "a - b = " << (a - b) << std::endl;
-		std::cout << "a * b = " << (a * b) << std::endl;
-		std::cout << "a / b = " << (a / b) << std::endl;
-		std::cout << "a / 0 = " << (a / 0) << std::endl;
+		// std::cout << "\n算術演算子のテスト:" << std::endl;
+		// std::cout << "a + b = " << (a + b) << std::endl;
+		// std::cout << "a - b = " << (a - b) << std::endl;
+		// std::cout << "a * b = " << (a * b) << std::endl;
+		// std::cout << "a / b = " << (a / b) << std::endl;
+		// std::cout << "a / 0 = " << (a / 0) << std::endl;
+		// }
+/*
+		{
+			Fixed a(42);
+		std::cout << "\nインクリメント/デクリメント演算子のテスト:" << std::endl;
+		std::cout << "a++ = " << (a++) << std::endl;
+		std::cout << "a = " << a << std::endl;
+		std::cout << "++a = " << (++a) << std::endl;
+		std::cout << "a = " << a << std::endl;
+		std::cout << "a-- = " << (a--) << std::endl;
+		std::cout << "a = " << a << std::endl;
+		std::cout << "--a = " << (--a) << std::endl;
+		std::cout << "a = " << a << std::endl;
 
 		// std::cout << Fixed::max( a, b ) << std::endl;
 	}
 	return 0;
-	// {
-	// 	Fixed a;
-	// 	Fixed const b( Fixed( 5.05f ) * Fixed( 2 ) );
+	*/
+	{
+std::cout << std::fixed << std::setprecision(10);
 
-	// 	std::cout << a << std::endl;
-	// 	std::cout << ++a << std::endl;
-	// 	std::cout << a << std::endl;
-	// 	std::cout << a++ << std::endl;
-	// 	std::cout << a << std::endl;
+		Fixed a;
+		Fixed const b( Fixed( 5.05f ) * Fixed( 2 ) );
 
-	// 	std::cout << b << std::endl;
+		std::cout << "a = " << a << std::endl;
+		std::cout << "after ++a = " << ++a << std::endl;
+		std::cout << "a = " << a << std::endl;
+		// std::cout << "getRawBits a = " << a.getRawBits() << std::endl;
+		// std::cout << "float a = " << a.toFloat() << std::endl;
 
-	// 	std::cout << Fixed::max( a, b ) << std::endl;
-	// }
-	// return 0;
+		// std::cout << a++ << std::endl;
+		// std::cout << "after a++ = " ;
+		// std::cout << a << std::endl;
+		// std::cout << "getRawBits a = " << a.getRawBits() << std::endl;
+		// std::cout << "float a = " << a.toFloat() << std::endl;
+
+		// std::cout << "b = " ;
+		// std::cout << b << std::endl;
+
+		std::cout << Fixed::max( a, b ) << std::endl;
+	}
+	return 0;
 }
+/*
+0.00390625 を二進数で表すと 0.00000001 
+0.00000001
+0.12345678
+ */

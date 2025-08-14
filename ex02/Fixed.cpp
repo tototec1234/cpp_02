@@ -82,7 +82,7 @@ Fixed::~Fixed(){
 
 
 int Fixed::getRawBits( void ) const{
-	std::cout << "getRawBits member function called" << std::endl;
+	std::cout << ANSI_COLOR_BLUE << "getRawBits member function called" << ANSI_COLOR_RESET << std::endl;
 	return (this->_value);
 }
 
@@ -91,8 +91,25 @@ void Fixed::setRawBits( int const raw ){
 	this->_value = raw;
 }
 
+/* Static member functions */
+Fixed &Fixed::min(Fixed &a, Fixed &b){
+	return (a < b ? a : b);
+}
+Fixed &Fixed::max(Fixed &a, Fixed &b){
+	return (a > b ? a : b);
+}
+
+const Fixed &Fixed::min(const Fixed &a, const Fixed &b){
+	return (a < b ? a : b);
+}
+const Fixed &Fixed::max(const Fixed &a, const Fixed &b){
+	return (a > b ? a : b);
+}
+
+// Overloaded Operators
+	/* Assignment operator */
 Fixed &Fixed::operator =(const Fixed &src){
-	std::cout << "Fixed Copy Assignment Operator called" << std::endl;
+	std::cout << ANSI_COLOR_YELLOW << "Fixed Copy Assignment Operator called" << ANSI_COLOR_RESET << std::endl;
 	if (this != &src)
 	{
 		this->_value = src.getRawBits();
@@ -156,6 +173,32 @@ Fixed	Fixed::operator /(const Fixed &other) const{
 	return (Fixed(this->toFloat() / other.toFloat()));
 }
 
+		/* The 4 increment/decrement (pre-increment and post-increment, pre-decrement and
+post-decrement) operators, which will increase or decrease the fixed-point value by
+the smallest representable ϵ, such that 1 + ϵ > 1. */
+
+Fixed	&Fixed::operator ++(void){
+	this->_value++;
+	return (*this);
+}
+
+Fixed	&Fixed::operator --(void){
+	this->_value--;
+	return (*this);
+}
+
+
+Fixed	Fixed::operator ++(int){
+	Fixed temp(*this);
+	this->_value++;
+	return (temp);
+}
+
+Fixed	Fixed::operator --(int){
+	Fixed temp(*this);
+	this->_value--;
+	return (temp);
+}
 
 std::ostream &operator <<(std::ostream &outputStream, const Fixed &fixed){
 	return(outputStream << fixed.toFloat());

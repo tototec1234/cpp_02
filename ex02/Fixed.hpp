@@ -18,17 +18,14 @@
 class Fixed
 {
 	public:
-		/* Contstructors & Destructors */
+	/* Contstructors & Destructors */
 		Fixed(void);
 		Fixed(const int integer);
 		Fixed(const float floatingPointNumber);
 		Fixed(const Fixed & src);
 		~Fixed(void);
-
-		/* Assignment operator */
-		Fixed &operator=(const Fixed &src);
-
 		
+	// Public Methods
 		/* Getters and setters */
 		int		getRawBits( void ) const;
 		void 	setRawBits( int const raw );
@@ -36,6 +33,17 @@ class Fixed
 		/* Conversion functions */
 		float	toFloat(void) const;
 		int		toInt(void) const;
+
+		/* Static member functions */
+		static Fixed &min(Fixed &a, Fixed &b);
+		static Fixed &max(Fixed &a, Fixed &b);
+		static const Fixed &min(const Fixed &a, const Fixed &b);
+		static const Fixed &max(const Fixed &a, const Fixed &b);
+
+
+	// Overloaded Operators
+		/* Assignment operator */
+		Fixed &operator=(const Fixed &src);
 
 		/* The 6 comparison operators: >, <, >=, <=, ==, and !=. */
 		bool	operator >(const Fixed &other) const;
@@ -49,6 +57,13 @@ class Fixed
 		Fixed	operator -(const Fixed &other) const;
 		Fixed	operator *(const Fixed &other) const;
 		Fixed	operator /(const Fixed &other) const;
+		/* The 4 increment/decrement (pre-increment and post-increment, pre-decrement and
+post-decrement) operators, which will increase or decrease the fixed-point value by
+the smallest representable ϵ, such that 1 + ϵ > 1. */
+		Fixed	&operator ++(void);
+		Fixed	&operator --(void);
+		Fixed	operator ++(int);
+		Fixed	operator --(int);
 
 				
 	private:

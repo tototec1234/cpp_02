@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   Fixed.cpp                                          :+:      :+:    :+:   */
+/*   Fixed copy.cpp                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: toruinoue <toruinoue@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/11 19:48:18 by torinoue          #+#    #+#             */
-/*   Updated: 2025/08/14 22:14:25 by toruinoue        ###   ########.fr       */
+/*   Updated: 2025/08/15 01:22:50 by toruinoue        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -164,57 +164,20 @@ bool	Fixed::operator !=(const Fixed &other) const{
 
 /* The 4 arithmetic operators: +, -, *, and /. */
 Fixed	Fixed::operator +(const Fixed &other) const{
-	// オーバーフローチェック付きの加算
-	long long result = static_cast<long long>(this->_value) + static_cast<long long>(other._value);
-	
-	if (result > INT_MAX) {
-		std::cerr << ANSI_COLOR_RED << "Warning: Addition result exceeds INT_MAX. Overflow occurred!" << ANSI_COLOR_RESET << std::endl;
-		result = INT_MAX;
-	}
-	else if (result < INT_MIN) {
-		std::cerr << ANSI_COLOR_RED << "Warning: Addition result is below INT_MIN. Underflow occurred!" << ANSI_COLOR_RESET << std::endl;
-		result = INT_MIN;
-	}
-	
-	Fixed resultFixed;
-	resultFixed.setRawBits(static_cast<int>(result));
-	return resultFixed;
+	Fixed result;
+	result.setRawBits(this->_value + other._value);
+	return result;
 }
 
 Fixed	Fixed::operator -(const Fixed &other) const{
-	// オーバーフローチェック付きの減算
-	long long result = static_cast<long long>(this->_value) - static_cast<long long>(other._value);
-	
-	if (result > INT_MAX) {
-		std::cerr << ANSI_COLOR_RED << "Warning: Subtraction result exceeds INT_MAX. Overflow occurred!" << ANSI_COLOR_RESET << std::endl;
-		result = INT_MAX;
-	}
-	else if (result < INT_MIN) {
-		std::cerr << ANSI_COLOR_RED << "Warning: Subtraction result is below INT_MIN. Underflow occurred!" << ANSI_COLOR_RESET << std::endl;
-		result = INT_MIN;
-	}
-	
-	Fixed resultFixed;
-	resultFixed.setRawBits(static_cast<int>(result));
-	return resultFixed;
+	Fixed result;
+	result.setRawBits(this->_value - other._value);
+	return result;
 }
 
 Fixed	Fixed::operator *(const Fixed &other) const{
-	// より安全な整数演算を使用してオーバーフローを防ぐ
 	long long result = static_cast<long long>(this->_value) * static_cast<long long>(other._value);
-	
-	// 固定小数点の乗算では、結果を右シフトして正しいスケールに戻す必要がある
 	result >>= _fractionalBits;
-	
-	// オーバーフローチェック
-	if (result > INT_MAX) {
-		std::cerr << ANSI_COLOR_RED << "Warning: Multiplication result exceeds INT_MAX. Overflow occurred!" << ANSI_COLOR_RESET << std::endl;
-		result = INT_MAX;
-	}
-	else if (result < INT_MIN) {
-		std::cerr << ANSI_COLOR_RED << "Warning: Multiplication result is below INT_MIN. Underflow occurred!" << ANSI_COLOR_RESET << std::endl;
-		result = INT_MIN;
-	}
 	
 	Fixed resultFixed;
 	resultFixed.setRawBits(static_cast<int>(result));
@@ -222,33 +185,13 @@ Fixed	Fixed::operator *(const Fixed &other) const{
 }
 
 Fixed	Fixed::operator /(const Fixed &other) const{
-	// ゼロ除算の処理
 	if (other._value == 0) {
-		std::cerr << ANSI_COLOR_RED << "Error: Division by zero!" << ANSI_COLOR_RESET << std::endl;
+		std::cerr << "Error: Division by zero!" << std::endl;
 		// 課題書では「ゼロ除算でプログラムがクラッシュすることは許容される」
-		// ここでは警告を出してゼロを返す
 		return Fixed(0);
 	}
 	
-	// 通常の除算処理
-	float result = this->toFloat() / other.toFloat();
-	
-	// 結果が表現可能範囲を超える場合の検出
-	const float MAX_REPRESENTABLE = static_cast<float>(INT_MAX >> _fractionalBits);
-	const float MIN_REPRESENTABLE = static_cast<float>(INT_MIN >> _fractionalBits);
-	
-	if (result > MAX_REPRESENTABLE) {
-		std::cerr << ANSI_COLOR_RED << "Warning: Division result exceeds representable range! Clamping to maximum." 
-				  << ANSI_COLOR_RESET << std::endl;
-		return Fixed(MAX_REPRESENTABLE);
-	}
-	else if (result < MIN_REPRESENTABLE) {
-		std::cerr << ANSI_COLOR_RED << "Warning: Division result exceeds representable range! Clamping to minimum." 
-				  << ANSI_COLOR_RESET << std::endl;
-		return Fixed(MIN_REPRESENTABLE);
-	}
-	
-	return Fixed(result);
+	return Fixed(this->toFloat() / other.toFloat());
 }
 
 		/* The 4 increment/decrement (pre-increment and post-increment, pre-decrement and

@@ -65,7 +65,7 @@ the smallest representable ϵ, such that 1 + ϵ > 1. */
 		Fixed	operator ++(int);
 		Fixed	operator --(int);
 
-				
+	
 	private:
 		int _value;
 		static const int _fractionalBits;

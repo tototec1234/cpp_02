@@ -93,17 +93,17 @@ void Fixed::setRawBits( int const raw ){
 
 /* Static member functions */
 Fixed &Fixed::min(Fixed &a, Fixed &b){
-	return (a < b ? a : b);
+	return (a._value < b._value ? a : b);
 }
 Fixed &Fixed::max(Fixed &a, Fixed &b){
-	return (a > b ? a : b);
+	return (a._value > b._value ? a : b);
 }
 
 const Fixed &Fixed::min(const Fixed &a, const Fixed &b){
-	return (a < b ? a : b);
+	return (a._value < b._value ? a : b);
 }
 const Fixed &Fixed::max(const Fixed &a, const Fixed &b){
-	return (a > b ? a : b);
+	return (a._value > b._value ? a : b);
 }
 
 // Overloaded Operators

@@ -15,6 +15,8 @@
 #include <iomanip>
 #include <climits>
 #include <cmath>
+#include <limits>
+#include <cfloat>
 
 const int Fixed::_fractionalBits = 8;
 
@@ -49,6 +51,15 @@ Fixed::Fixed(const int integer): _value(integer << _fractionalBits){
 Fixed::Fixed(const float floatingPointNumber){
 	// std::cerr << ANSI_COLOR_YELLOW << "Fixed Float Constructor called" << ANSI_COLOR_RESET << std::endl;
 	// std::cerr << ANSI_COLOR_YELLOW << "			floatingPointNumber=" << floatingPointNumber << ANSI_COLOR_RESET << std::endl;
+	
+	// 最小表現可能値のチェック（丸め処理前）
+	const float MIN_REPRESENTABLE = 1.0f / (1 << _fractionalBits);  // 1/256 = 0.00390625
+	
+	if (floatingPointNumber != 0.0f && std::abs(floatingPointNumber) < MIN_REPRESENTABLE) {
+		std::cerr << ANSI_COLOR_YELLOW << "Warning: Input value " << floatingPointNumber 
+				  << " is smaller than minimum representable value " << MIN_REPRESENTABLE 
+				  << ". Value will be rounded to " << MIN_REPRESENTABLE << " or 0." << ANSI_COLOR_RESET << std::endl;
+	}
 	
 	long long scaled_result = static_cast<long long>(roundf(floatingPointNumber * (1 << _fractionalBits)));
 	
@@ -156,10 +167,24 @@ Fixed &Fixed::operator =(const Fixed &src){
 
 // float	Fixed::toFloat(void) 
 float	Fixed::toFloat(void) const{
+	if (isNaN()) {
+		return std::numeric_limits<float>::quiet_NaN();
+	}
+	else if (isPositiveInfinity()) {
+		return std::numeric_limits<float>::infinity();
+	}
+	else if (isNegativeInfinity()) {
+		return -std::numeric_limits<float>::infinity();
+	}
 	return (static_cast<float>(this->_value) / (1 << _fractionalBits));
 }
 
 int		Fixed::toInt(void) const{
+	if (isNaN() || isInfinite()) {
+		std::cerr << ANSI_COLOR_RED << "Warning: Converting special value to int, returning 0" 
+				  << ANSI_COLOR_RESET << std::endl;
+		return 0;
+	}
 	return (this->_value >> _fractionalBits);
 }
 
@@ -190,16 +215,21 @@ bool	Fixed::operator !=(const Fixed &other) const{
 
 /* The 4 arithmetic operators: +, -, *, and /. */
 Fixed	Fixed::operator +(const Fixed &other) const{
+	// 特別な値の処理
+	if (this->isNaN() || other.isNaN()) {
+		return getNaN();
+	}
+	
 	// オーバーフローチェック付きの加算
 	long long result = static_cast<long long>(this->_value) + static_cast<long long>(other._value);
 	
 	if (result > INT_MAX) {
 		std::cerr << ANSI_COLOR_RED << "Warning: Addition result exceeds INT_MAX. Overflow occurred!" << ANSI_COLOR_RESET << std::endl;
-		return Fixed();
+		return getNaN();
 	}
 	else if (result < INT_MIN) {
 		std::cerr << ANSI_COLOR_RED << "Warning: Addition result is below INT_MIN. Underflow occurred!" << ANSI_COLOR_RESET << std::endl;
-		return Fixed();
+		return getNaN();
 	}
 	
 	Fixed resultFixed;
@@ -208,16 +238,21 @@ Fixed	Fixed::operator +(const Fixed &other) const{
 }
 
 Fixed	Fixed::operator -(const Fixed &other) const{
+	// 特別な値の処理
+	if (this->isNaN() || other.isNaN()) {
+		return getNaN();
+	}
+	
 	// オーバーフローチェック付きの減算
 	long long result = static_cast<long long>(this->_value) - static_cast<long long>(other._value);
 	
 	if (result > INT_MAX) {
 		std::cerr << ANSI_COLOR_RED << "Warning: Subtraction result exceeds INT_MAX. Overflow occurred!" << ANSI_COLOR_RESET << std::endl;
-		return Fixed();
+		return getNaN();
 	}
 	else if (result < INT_MIN) {
 		std::cerr << ANSI_COLOR_RED << "Warning: Subtraction result is below INT_MIN. Underflow occurred!" << ANSI_COLOR_RESET << std::endl;
-		return Fixed();
+		return getNaN();
 	}
 	
 	Fixed resultFixed;
@@ -226,6 +261,11 @@ Fixed	Fixed::operator -(const Fixed &other) const{
 }
 
 Fixed	Fixed::operator *(const Fixed &other) const{
+	// 特別な値の処理
+	if (this->isNaN() || other.isNaN()) {
+		return getNaN();
+	}
+	
 	// より安全な整数演算を使用してオーバーフローを防ぐ
 	long long result = static_cast<long long>(this->_value) * static_cast<long long>(other._value);
 	
@@ -235,11 +275,11 @@ Fixed	Fixed::operator *(const Fixed &other) const{
 	// オーバーフローチェック
 	if (result > INT_MAX) {
 		std::cerr << ANSI_COLOR_RED << "Warning: Multiplication result exceeds INT_MAX. Overflow occurred!" << ANSI_COLOR_RESET << std::endl;
-		return Fixed();  // 0を返す
+		return getNaN();
 	}
 	else if (result < INT_MIN) {
 		std::cerr << ANSI_COLOR_RED << "Warning: Multiplication result is below INT_MIN. Underflow occurred!" << ANSI_COLOR_RESET << std::endl;
-		return Fixed();  // 0を返す
+		return getNaN();
 	}
 	
 	Fixed resultFixed;
@@ -338,6 +378,15 @@ Fixed	Fixed::operator --(int){
 }
 
 std::ostream &operator <<(std::ostream &outputStream, const Fixed &fixed){
+	if (fixed.isNaN()) {
+		return(outputStream << "nan");
+	}
+	else if (fixed.isPositiveInfinity()) {
+		return(outputStream << "inf");
+	}
+	else if (fixed.isNegativeInfinity()) {
+		return(outputStream << "-inf");
+	}
 	return(outputStream << fixed.toFloat());
 }
 

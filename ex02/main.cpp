@@ -6,7 +6,7 @@
 /*   By: toruinoue <toruinoue@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/11 19:48:06 by torinoue          #+#    #+#             */
-/*   Updated: 2025/08/14 15:28:43 by toruinoue        ###   ########.fr       */
+/*   Updated: 2025/08/14 20:19:37 by toruinoue        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,97 +17,78 @@
 
 int main( void )
 {
-	// {
-	// 	Fixed a;
-	// 	Fixed b( a );
-	// 	Fixed c;
-	// 	std::cerr << ANSI_COLOR_BLUE << "Command: c = b;" << ANSI_COLOR_RESET << std::endl;
-	// 	c = b;
-	// 	std::cout << a.getRawBits() << std::endl;
-	// 	std::cout << b.getRawBits() << std::endl;
-	// 	std::cout << c.getRawBits() << std::endl;
-	// }
-	// {
-	// 	Fixed a;
-	// 	Fixed const b( 10 );
-	// 	Fixed const c( 42.42f );
-	// 	Fixed const d( b );
+	{
+		int int_a = 10;
+		int int_b = 10;
+		std::cout << "                 int_a = " << int_a << "                   &int_a = " << &int_a << std::endl;
+		std::cout << "                 int_b = " << int_b << "                   &int_b = " << &int_b << std::endl;
+		std::cout << "std::min(int_a, int_b) = " << std::min(int_a, int_b) << "  &std::min(int_a, int_b) = " << &std::min(int_a, int_b) << std::endl;
+		
+		std::cout << std::endl;
 
-	// 	a = Fixed( 1234.4321f );
-	
-	// 	std::cout << "a is " << a << std::endl;
-	// 	std::cout << "b is " << b << std::endl;
-	// 	std::cout << "c is " << c << std::endl;
-	// 	std::cout << "d is " << d << std::endl;
+		Fixed a(10);
+		Fixed b(10);
+		
+		std::cout << "                     a = " << a << "                       &a = " << &a << std::endl;
+		std::cout << "                     b = " << b << "                       &b = " << &b << std::endl;
+		std::cout << "             min(a, b) = " << Fixed::min(a,b) << "               &min(a, b) = " << &Fixed::min(a, b) << std::endl;
 
-	// 	std::cout << "a is " << a.toInt() << " as integer" << std::endl;
-	// 	std::cout << "b is " << b.toInt() << " as integer" << std::endl;
-	// 	std::cout << "c is " << c.toInt() << " as integer" << std::endl;
-	// 	std::cout << "d is " << d.toInt() << " as integer" << std::endl;
-	// }
-	// {
-		// {
-		// Fixed a(10.5f);
-		// Fixed b(5.25f);
-		// Fixed c(5.25f);
+		std::cout << std::endl;
+		
+		std::cout << "------------------" << std::endl;
+		std::cout << "min(a, b) = " << std::min(a.getRawBits(), b.getRawBits()) << "       &min(a, b) = " << &std::min(a.getRawBits(), b.getRawBits()) << std::endl;
 
-		// std::cout << "比較演算子のテスト:" << std::endl;
-		// std::cout << "a > b: " << (a > b) << std::endl;
-		// std::cout << "a < b: " << (a < b) << std::endl;
-		// std::cout << "b >= c: " << (b >= c) << std::endl;
-		// std::cout << "a <= b: " << (a <= b) << std::endl;
-		// std::cout << "b == c: " << (b == c) << std::endl;
-		// std::cout << "a != b: " << (a != b) << std::endl;
-
-		// std::cout << "\n算術演算子のテスト:" << std::endl;
-		// std::cout << "a + b = " << (a + b) << std::endl;
-		// std::cout << "a - b = " << (a - b) << std::endl;
-		// std::cout << "a * b = " << (a * b) << std::endl;
-		// std::cout << "a / b = " << (a / b) << std::endl;
-		// std::cout << "a / 0 = " << (a / 0) << std::endl;
-		// }
-/*
-		{
-			Fixed a(42);
-		std::cout << "\nインクリメント/デクリメント演算子のテスト:" << std::endl;
-		std::cout << "a++ = " << (a++) << std::endl;
-		std::cout << "a = " << a << std::endl;
-		std::cout << "++a = " << (++a) << std::endl;
-		std::cout << "a = " << a << std::endl;
-		std::cout << "a-- = " << (a--) << std::endl;
-		std::cout << "a = " << a << std::endl;
-		std::cout << "--a = " << (--a) << std::endl;
-		std::cout << "a = " << a << std::endl;
-
-		// std::cout << Fixed::max( a, b ) << std::endl;
 	}
 	return 0;
-	*/
+
 	{
-std::cout << std::fixed << std::setprecision(10);
+	Fixed a(10);
+	Fixed b(20);
+	Fixed c(10);
+	std::cout << "a = " << a << std::endl;
+	std::cout << "b = " << b << std::endl;
+	std::cout << "c = " << c << std::endl;
 
-		Fixed a;
-		// Fixed const b( Fixed( 5.05f ) * Fixed( 2 ) );
+	std::cout << "\n非constオブジェクトでのmin/maxのテスト:" << std::endl;
+	std::cout << "min(a, b) = " << Fixed::min(a, b) << std::endl;
+	std::cout << "max(a, b) = " << Fixed::max(a, b) << std::endl;
+	std::cout << "min(a, c) = " << Fixed::min(a, c) << std::endl;
+	std::cout << "max(a, c) = " << Fixed::max(a, c) << std::endl;
+	
+	std::cout << std::endl;
+	std::cout << "&a = " << &a << std::endl;
+	std::cout << "&b = " << &b << std::endl;
+	std::cout << "&c = " << &c << std::endl;
 
-		std::cout << "a = " << a << std::endl;
-		// std::cout << "after ++a = " << ++a << std::endl;
-		// std::cout << "a-- = " << a-- << std::endl;
-		std::cout << "--a = " << --a << std::endl;
-		std::cout << "a = " << a << std::endl;
-		// std::cout << "getRawBits a = " << a.getRawBits() << std::endl;
-		// std::cout << "float a = " << a.toFloat() << std::endl;
+	std::cout << "&max(a, c) = " << &Fixed::max(a, c) << std::endl;
 
-		// std::cout << a++ << std::endl;
-		// std::cout << "after a++ = " ;
-		// std::cout << a << std::endl;
-		// std::cout << "getRawBits a = " << a.getRawBits() << std::endl;
-		// std::cout << "float a = " << a.toFloat() << std::endl;
-
-		// std::cout << "b = " ;
-		// std::cout << b << std::endl;
-
-		// std::cout << Fixed::max( a, b ) << std::endl;
+	std::cout << std::endl;
+	std::cout << "a.getRawBits() = " << a.getRawBits() << std::endl;
+	std::cout << "b.getRawBits() = " << b.getRawBits() << std::endl;
+	std::cout << "c.getRawBits() = " << c.getRawBits() << std::endl;
 	}
+
+	return 0;
+{
+	const Fixed e(30);
+	const Fixed f(40);
+	const Fixed g(30);
+
+	
+	std::cout << "\nconst オブジェクトでのmin/maxのテスト:" << std::endl;
+	std::cout << "e = " << e << std::endl;
+	std::cout << "f = " << f << std::endl;
+	std::cout << "g = " << g << std::endl;
+	std::cout << "min(e, f) = " << Fixed::min(e, f) << std::endl;
+	std::cout << "max(e, f) = " << Fixed::max(e, f) << std::endl;
+	std::cout << "min(e, g) = " << Fixed::min(e, g) << std::endl;
+	std::cout << "max(e, g) = " << Fixed::max(e, g) << std::endl;
+
+	
+	std::cout << "&e = " << &e << std::endl;
+	std::cout << "&f = " << &f << std::endl;
+	std::cout << "&g = " << &g << std::endl;
+}
 	return 0;
 }
 /*

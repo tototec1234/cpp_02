@@ -6,7 +6,7 @@
 /*   By: toruinoue <toruinoue@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/11 19:48:18 by torinoue          #+#    #+#             */
-/*   Updated: 2025/08/14 16:00:16 by toruinoue        ###   ########.fr       */
+/*   Updated: 2025/08/14 20:13:04 by toruinoue        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,17 +93,17 @@ void Fixed::setRawBits( int const raw ){
 
 /* Static member functions */
 Fixed &Fixed::min(Fixed &a, Fixed &b){
-	return (a._value < b._value ? a : b);
+	return (a._value > b._value ? b : a);
 }
 Fixed &Fixed::max(Fixed &a, Fixed &b){
-	return (a._value > b._value ? a : b);
+	return (a._value < b._value ? b : a);
 }
 
 const Fixed &Fixed::min(const Fixed &a, const Fixed &b){
-	return (a._value < b._value ? a : b);
+	return (a._value > b._value ? b : a);
 }
 const Fixed &Fixed::max(const Fixed &a, const Fixed &b){
-	return (a._value > b._value ? a : b);
+	return (a._value < b._value ? b : a);
 }
 
 // Overloaded Operators

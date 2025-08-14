@@ -77,17 +77,17 @@ Fixed::Fixed(const float floatingPointNumber){
 }
 		
 Fixed::~Fixed(){
-    std::cerr << ANSI_COLOR_RED << "Fixed Destructor called" << ANSI_COLOR_RESET << std::endl;
+    // std::cerr << ANSI_COLOR_RED << "Fixed Destructor called" << ANSI_COLOR_RESET << std::endl;
 }
 
 
 int Fixed::getRawBits( void ) const{
-	std::cout << ANSI_COLOR_BLUE << "getRawBits member function called" << ANSI_COLOR_RESET << std::endl;
+	// std::cout << ANSI_COLOR_BLUE << "getRawBits member function called" << ANSI_COLOR_RESET << std::endl;
 	return (this->_value);
 }
 
 void Fixed::setRawBits( int const raw ){
-	std::cout << "setRawBits member function called" << std::endl;
+	// std::cout << "setRawBits member function called" << std::endl;
 	this->_value = raw;
 }
 
@@ -109,7 +109,7 @@ const Fixed &Fixed::max(const Fixed &a, const Fixed &b){
 // Overloaded Operators
 	/* Assignment operator */
 Fixed &Fixed::operator =(const Fixed &src){
-	std::cout << ANSI_COLOR_YELLOW << "Fixed Copy Assignment Operator called" << ANSI_COLOR_RESET << std::endl;
+	// std::cout << ANSI_COLOR_YELLOW << "Fixed Copy Assignment Operator called" << ANSI_COLOR_RESET << std::endl;
 	if (this != &src)
 	{
 		this->_value = src.getRawBits();
@@ -189,7 +189,7 @@ Fixed	Fixed::operator ++(int){
 }
 
 Fixed	&Fixed::operator --(void){
-	std::cout << ANSI_COLOR_YELLOW << "Fixed Pre-Decrement Operator called" << ANSI_COLOR_RESET << std::endl;
+	// std::cout << ANSI_COLOR_YELLOW << "Fixed Pre-Decrement Operator called" << ANSI_COLOR_RESET << std::endl;
 	this->_value--;
 	return (*this);
 }

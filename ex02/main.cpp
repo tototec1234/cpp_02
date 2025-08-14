@@ -6,7 +6,7 @@
 /*   By: toruinoue <toruinoue@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/11 19:48:06 by torinoue          #+#    #+#             */
-/*   Updated: 2025/08/13 19:00:24 by toruinoue        ###   ########.fr       */
+/*   Updated: 2025/08/14 15:28:43 by toruinoue        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,47 +16,70 @@
 
 int main( void )
 {
-	{
-		Fixed a;
-		Fixed b( a );
-		Fixed c;
-		std::cerr << ANSI_COLOR_BLUE << "Command: c = b;" << ANSI_COLOR_RESET << std::endl;
-		c = b;
-		std::cout << a.getRawBits() << std::endl;
-		std::cout << b.getRawBits() << std::endl;
-		std::cout << c.getRawBits() << std::endl;
-	}
-	{
-		Fixed a;
-		Fixed const b( 10 );
-		Fixed const c( 42.42f );
-		Fixed const d( b );
+	// {
+	// 	Fixed a;
+	// 	Fixed b( a );
+	// 	Fixed c;
+	// 	std::cerr << ANSI_COLOR_BLUE << "Command: c = b;" << ANSI_COLOR_RESET << std::endl;
+	// 	c = b;
+	// 	std::cout << a.getRawBits() << std::endl;
+	// 	std::cout << b.getRawBits() << std::endl;
+	// 	std::cout << c.getRawBits() << std::endl;
+	// }
+	// {
+	// 	Fixed a;
+	// 	Fixed const b( 10 );
+	// 	Fixed const c( 42.42f );
+	// 	Fixed const d( b );
 
-		a = Fixed( 1234.4321f );
+	// 	a = Fixed( 1234.4321f );
 	
-		std::cout << "a is " << a << std::endl;
-		std::cout << "b is " << b << std::endl;
-		std::cout << "c is " << c << std::endl;
-		std::cout << "d is " << d << std::endl;
+	// 	std::cout << "a is " << a << std::endl;
+	// 	std::cout << "b is " << b << std::endl;
+	// 	std::cout << "c is " << c << std::endl;
+	// 	std::cout << "d is " << d << std::endl;
 
-		std::cout << "a is " << a.toInt() << " as integer" << std::endl;
-		std::cout << "b is " << b.toInt() << " as integer" << std::endl;
-		std::cout << "c is " << c.toInt() << " as integer" << std::endl;
-		std::cout << "d is " << d.toInt() << " as integer" << std::endl;
-	}
+	// 	std::cout << "a is " << a.toInt() << " as integer" << std::endl;
+	// 	std::cout << "b is " << b.toInt() << " as integer" << std::endl;
+	// 	std::cout << "c is " << c.toInt() << " as integer" << std::endl;
+	// 	std::cout << "d is " << d.toInt() << " as integer" << std::endl;
+	// }
 	{
-		Fixed a;
-		Fixed const b( Fixed( 5.05f ) * Fixed( 2 ) );
+		Fixed a(10.5f);
+		Fixed b(5.25f);
+		Fixed c(5.25f);
 
-		std::cout << a << std::endl;
-		std::cout << ++a << std::endl;
-		std::cout << a << std::endl;
-		std::cout << a++ << std::endl;
-		std::cout << a << std::endl;
+		std::cout << "比較演算子のテスト:" << std::endl;
+		std::cout << "a > b: " << (a > b) << std::endl;
+		std::cout << "a < b: " << (a < b) << std::endl;
+		std::cout << "b >= c: " << (b >= c) << std::endl;
+		std::cout << "a <= b: " << (a <= b) << std::endl;
+		std::cout << "b == c: " << (b == c) << std::endl;
+		std::cout << "a != b: " << (a != b) << std::endl;
 
-		std::cout << b << std::endl;
+		std::cout << "\n算術演算子のテスト:" << std::endl;
+		std::cout << "a + b = " << (a + b) << std::endl;
+		std::cout << "a - b = " << (a - b) << std::endl;
+		std::cout << "a * b = " << (a * b) << std::endl;
+		std::cout << "a / b = " << (a / b) << std::endl;
+		std::cout << "a / 0 = " << (a / 0) << std::endl;
 
-		std::cout << Fixed::max( a, b ) << std::endl;
+		// std::cout << Fixed::max( a, b ) << std::endl;
 	}
 	return 0;
+	// {
+	// 	Fixed a;
+	// 	Fixed const b( Fixed( 5.05f ) * Fixed( 2 ) );
+
+	// 	std::cout << a << std::endl;
+	// 	std::cout << ++a << std::endl;
+	// 	std::cout << a << std::endl;
+	// 	std::cout << a++ << std::endl;
+	// 	std::cout << a << std::endl;
+
+	// 	std::cout << b << std::endl;
+
+	// 	std::cout << Fixed::max( a, b ) << std::endl;
+	// }
+	// return 0;
 }

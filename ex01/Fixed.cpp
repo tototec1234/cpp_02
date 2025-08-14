@@ -6,7 +6,7 @@
 /*   By: toruinoue <toruinoue@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/11 19:48:18 by torinoue          #+#    #+#             */
-/*   Updated: 2025/08/13 20:56:59 by toruinoue        ###   ########.fr       */
+/*   Updated: 2025/08/14 14:57:46 by toruinoue        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,11 +32,8 @@ Fixed::Fixed(const int integer): _value(integer << _fractionalBits)
 {
 	std::cerr << ANSI_COLOR_YELLOW << "Fixed Integer Constructor called" << ANSI_COLOR_RESET << std::endl;
 	
-	// 上限値チェック（INT_MAX / 256 = 8388607）
 	const int MAX_SAFE_INT = INT_MAX / (1 << _fractionalBits);
-	// 下限値チェック（INT_MIN / 256 = -8388608）
 	const int MIN_SAFE_INT = INT_MIN / (1 << _fractionalBits);
-
 	
 	if (integer > MAX_SAFE_INT) {
 		std::cerr << ANSI_COLOR_RED << "Warning: Integer " << integer 
@@ -51,18 +48,15 @@ Fixed::Fixed(const int integer): _value(integer << _fractionalBits)
 }
 
 
-// Fixed::Fixed(const float floatingPointNumber): _value(static_cast<int>(roundf( floatingPointNumber * pow(2, _fractionalBits))))
 Fixed::Fixed(const float floatingPointNumber)
 {
 	std::cerr << ANSI_COLOR_YELLOW << "Fixed Float Constructor called" << ANSI_COLOR_RESET << std::endl;
 	std::cerr << ANSI_COLOR_YELLOW << "			floatingPointNumber=" << floatingPointNumber << ANSI_COLOR_RESET << std::endl;
 	
-	// roundf結果をlong long型で受け取ってオーバーフローチェック
 	long long scaled_result = static_cast<long long>(roundf(floatingPointNumber * (1 << _fractionalBits)));
 	
-	std::cerr << ANSI_COLOR_BLUE << "			scaled_result (long long)=" << scaled_result << ANSI_COLOR_RESET << std::endl;
+	// std::cerr << ANSI_COLOR_BLUE << "			scaled_result (long long)=" << scaled_result << ANSI_COLOR_RESET << std::endl;
 	
-	// INT_MAX/MIN範囲チェック
 	if (scaled_result > INT_MAX) {
 		std::cerr << ANSI_COLOR_RED << "		Warning: Rounded result " << scaled_result 
 				  << " exceeds INT_MAX (" << INT_MAX << "). Overflow occurred!" << ANSI_COLOR_RESET << std::endl;
@@ -76,12 +70,13 @@ Fixed::Fixed(const float floatingPointNumber)
 	else {
 		_value = static_cast<int>(scaled_result);
 	}
-	if (scaled_result > 0) {
-		std::cerr << ANSI_COLOR_BLUE << "			Difference from INT_MAX  =" << INT_MAX - scaled_result << std::endl;
-	} else {
-		std::cerr << ANSI_COLOR_BLUE << "			Difference from INT_MIN  =" << scaled_result - INT_MIN << std::endl;
-	}	
-	std::cerr << ANSI_COLOR_BLUE << "			final _value=" << _value << ANSI_COLOR_RESET << std::endl;
+	
+	// if (scaled_result > 0) {
+	// 	std::cerr << ANSI_COLOR_BLUE << "			Difference from INT_MAX  =" << INT_MAX - scaled_result << std::endl;
+	// } else {
+	// 	std::cerr << ANSI_COLOR_BLUE << "			Difference from INT_MIN  =" << scaled_result - INT_MIN << std::endl;
+	// }	
+	// std::cerr << ANSI_COLOR_BLUE << "			final _value=" << _value << ANSI_COLOR_RESET << std::endl;
 
 }
 		

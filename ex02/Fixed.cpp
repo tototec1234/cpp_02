@@ -241,42 +241,63 @@ Fixed	Fixed::operator *(const Fixed &other) const{
 }
 
 Fixed	Fixed::operator /(const Fixed &other) const{
-	// ゼロ除算の処理
+	// ゼロ除算チェック
 	if (other._value == 0) {
 		std::cerr << ANSI_COLOR_RED << "Error: Division by zero!" << ANSI_COLOR_RESET << std::endl;
-		// 課題書では「ゼロ除算でプログラムがクラッシュすることは許容される」
-		// ここでは警告を出してゼロを返す
-		// return Fixed(0);
-		// クラッシュ用Dummyy演算
-		// int dummy = 1 / other.toInt();
+		// 課題要件に従いクラッシュさせる
 		int dummy = 1 / other.getRawBits();
-		std::cerr << "other.getRawBits() = " << other.getRawBits() << std::endl;
-		std::cerr << "dummy = " << dummy << std::endl;
-		
-		// 42の校舎でのレビュー時環境対応のため、スコープ末端にabort()を追加
 		std::abort();
 		return Fixed(dummy);
 	}
 	
-	// 通常の除算処理
-	float result = this->toFloat() / other.toFloat();
-	
-	// 結果が表現可能範囲を超える場合の検出
-	const float MAX_REPRESENTABLE = static_cast<float>(INT_MAX >> _fractionalBits);
-	const float MIN_REPRESENTABLE = static_cast<float>(INT_MIN >> _fractionalBits);
-	
-	if (result > MAX_REPRESENTABLE) {
-		std::cerr << ANSI_COLOR_RED << "Warning: Division result exceeds representable range! Clamping to maximum." 
-				  << ANSI_COLOR_RESET << std::endl;
-		return Fixed(MAX_REPRESENTABLE);
-	}
-	else if (result < MIN_REPRESENTABLE) {
-		std::cerr << ANSI_COLOR_RED << "Warning: Division result exceeds representable range! Clamping to minimum." 
-				  << ANSI_COLOR_RESET << std::endl;
-		return Fixed(MIN_REPRESENTABLE);
+	// 特別ケース：1で割る場合（完全な精度保持）
+	if (other._value == (1 << _fractionalBits)) {
+		Fixed result;
+		result.setRawBits(this->_value);
+		return result;
 	}
 	
-	return Fixed(result);
+	// 固定小数点直接演算による高精度除算
+	// 被除数を左シフトして精度を確保（64bit演算で中間結果の精度を保持）
+	long long extended_dividend = static_cast<long long>(this->_value) << _fractionalBits;
+	long long raw_quotient = extended_dividend / static_cast<long long>(other._value);
+	
+	// 四捨五入処理（固定小数点演算での正確な丸め）
+	long long remainder = extended_dividend % static_cast<long long>(other._value);
+	if (remainder != 0) {
+		// 符号を考慮した四捨五入判定
+		bool dividend_positive = (extended_dividend >= 0);
+		bool divisor_positive = (other._value >= 0);
+		bool same_sign = (dividend_positive == divisor_positive);
+		
+		// 絶対値による半値判定
+		long long abs_remainder = (remainder < 0) ? -remainder : remainder;
+		long long abs_divisor = (other._value < 0) ? -static_cast<long long>(other._value) : static_cast<long long>(other._value);
+		
+		// 四捨五入：余りの絶対値が除数の絶対値の半分以上の場合
+		if (abs_remainder * 2 >= abs_divisor) {
+			raw_quotient += same_sign ? 1 : -1;
+		}
+	}
+	
+	// 固定小数点範囲内でのオーバーフローチェック
+	if (raw_quotient > static_cast<long long>(INT_MAX)) {
+		std::cerr << ANSI_COLOR_RED << "Warning: Division result " << raw_quotient 
+				  << " exceeds maximum representable value (" << INT_MAX 
+				  << "). Result clamped to maximum." << ANSI_COLOR_RESET << std::endl;
+		raw_quotient = static_cast<long long>(INT_MAX);
+	}
+	else if (raw_quotient < static_cast<long long>(INT_MIN)) {
+		std::cerr << ANSI_COLOR_RED << "Warning: Division result " << raw_quotient 
+				  << " is below minimum representable value (" << INT_MIN 
+				  << "). Result clamped to minimum." << ANSI_COLOR_RESET << std::endl;
+		raw_quotient = static_cast<long long>(INT_MIN);
+	}
+	
+	// 結果のFixed型オブジェクト作成
+	Fixed result;
+	result.setRawBits(static_cast<int>(raw_quotient));
+	return result;
 }
 
 		/* The 4 increment/decrement (pre-increment and post-increment, pre-decrement and

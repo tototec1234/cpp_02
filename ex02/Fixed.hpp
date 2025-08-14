@@ -61,11 +61,9 @@ class Fixed
 post-decrement) operators, which will increase or decrease the fixed-point value by
 the smallest representable ϵ, such that 1 + ϵ > 1. */
 		Fixed	&operator ++(void);
-		Fixed	&operator --(int);
-		// Fixed	&operator --(void);
+		Fixed	&operator --(void);
 		Fixed	operator ++(int);
-		// Fixed	operator --(int);
-		Fixed	operator --(void);
+		Fixed	operator --(int);
 
 				
 	private:

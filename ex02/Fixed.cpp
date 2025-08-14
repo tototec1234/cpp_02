@@ -188,8 +188,7 @@ Fixed	Fixed::operator ++(int){
 	return (temp);
 }
 
-Fixed	&Fixed::operator --(int){
-// Fixed	&Fixed::operator --(void){
+Fixed	&Fixed::operator --(void){
 	std::cout << ANSI_COLOR_YELLOW << "Fixed Pre-Decrement Operator called" << ANSI_COLOR_RESET << std::endl;
 	this->_value--;
 	return (*this);
@@ -216,8 +215,7 @@ tempは値として返される（参照ではない）
    // 2. <<演算子がtempを受け取る  
    // 3. toFloat()がtempに対して呼ばれる
    // 4. 文全体の評価完了後にtempが破棄される
-Fixed	Fixed::operator --(void){
-// Fixed	Fixed::operator --(int){
+Fixed	Fixed::operator --(int){
 	std::cout << ANSI_COLOR_YELLOW << "Fixed Post-Decrement Operator called" << ANSI_COLOR_RESET << std::endl;
 	Fixed temp(*this);
 	this->_value--;

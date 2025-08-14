@@ -92,7 +92,7 @@ std::cout << std::fixed << std::setprecision(10);
 		std::cout << "a = " << a << std::endl;
 		// std::cout << "after ++a = " << ++a << std::endl;
 		// std::cout << "a-- = " << a-- << std::endl;
-		std::cout << "a-- = " << a-- << std::endl;
+		std::cout << "--a = " << --a << std::endl;
 		std::cout << "a = " << a << std::endl;
 		// std::cout << "getRawBits a = " << a.getRawBits() << std::endl;
 		// std::cout << "float a = " << a.toFloat() << std::endl;

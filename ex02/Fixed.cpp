@@ -77,7 +77,7 @@ Fixed::Fixed(const float floatingPointNumber){
 }
 		
 Fixed::~Fixed(){
-    // std::cerr << ANSI_COLOR_RED << "Fixed Destructor called" << ANSI_COLOR_RESET << std::endl;
+    std::cerr << ANSI_COLOR_RED << "Fixed Destructor called" << ANSI_COLOR_RESET << std::endl;
 }
 
 
@@ -182,19 +182,43 @@ Fixed	&Fixed::operator ++(void){
 	return (*this);
 }
 
-Fixed	&Fixed::operator --(void){
-	this->_value--;
-	return (*this);
-}
-
-
 Fixed	Fixed::operator ++(int){
 	Fixed temp(*this);
 	this->_value++;
 	return (temp);
 }
 
-Fixed	Fixed::operator --(int){
+Fixed	&Fixed::operator --(int){
+// Fixed	&Fixed::operator --(void){
+	std::cout << ANSI_COLOR_YELLOW << "Fixed Pre-Decrement Operator called" << ANSI_COLOR_RESET << std::endl;
+	this->_value--;
+	return (*this);
+}
+/*
+mpについて、以下の懸念を持っています：
+tempは演算前の値のコピーを保持している
+tempを返すことで<<演算子（toFloat()）に値を渡している
+しかし、operator--(int)のスコープを抜けた時にtempのデストラクタが呼ばれて破棄される
+そうするとtoFloat()に参照が渡せないのではないか？
+これは一時オブジェクトの生存期間に関する重要な質問です。
+実際のところ、C++では値で返されるオブジェクトは、その値が使用されるまでの間（通常は式の評価が完了するまで）生存期間が延長されます。つまり：
+tempは値として返される（参照ではない）
+戻り値として返される時に、tempのコピーが作成されるか、あるいはReturn Value Optimization (RVO)により最適化される
+そのコピー（または最適化されたオブジェクト）は、式の評価が完了するまで生存する
+<<演算子が呼ばれる時には、そのオブジェクトはまだ有効
+
+
+
+*/
+	// std::cout << a-- ;
+   // この順序で実行されます：
+   // 1. a--が評価され、tempが作成・返される
+   // 2. <<演算子がtempを受け取る  
+   // 3. toFloat()がtempに対して呼ばれる
+   // 4. 文全体の評価完了後にtempが破棄される
+Fixed	Fixed::operator --(void){
+// Fixed	Fixed::operator --(int){
+	std::cout << ANSI_COLOR_YELLOW << "Fixed Post-Decrement Operator called" << ANSI_COLOR_RESET << std::endl;
 	Fixed temp(*this);
 	this->_value--;
 	return (temp);
@@ -204,3 +228,18 @@ std::ostream &operator <<(std::ostream &outputStream, const Fixed &fixed){
 	return(outputStream << fixed.toFloat());
 }
 
+
+/*
+Fixed	&Fixed::operator --(void){
+	std::cout << ANSI_COLOR_YELLOW << "Fixed Pre-Decrement Operator called" << ANSI_COLOR_RESET << std::endl;
+	this->_value--;
+	return (*this);
+}
+
+が関数シグネチャ前方の＆でオブジェクトのアドレス（ポインタ）を返す型を宣言しているので指定子のオブジェクトの
+_valueを書き換えた後にそのアドレスを返すことで　<< にオーバーロードされているtoFloteにアドレスを渡すので演算後の値が表示される
+
+というのは理解できました。
+
+一方で
+*/

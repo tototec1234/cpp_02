@@ -61,9 +61,11 @@ class Fixed
 post-decrement) operators, which will increase or decrease the fixed-point value by
 the smallest representable ϵ, such that 1 + ϵ > 1. */
 		Fixed	&operator ++(void);
-		Fixed	&operator --(void);
+		Fixed	&operator --(int);
+		// Fixed	&operator --(void);
 		Fixed	operator ++(int);
-		Fixed	operator --(int);
+		// Fixed	operator --(int);
+		Fixed	operator --(void);
 
 				
 	private:
@@ -74,3 +76,9 @@ the smallest representable ϵ, such that 1 + ϵ > 1. */
 
 std::ostream &operator <<(std::ostream &outputStream, const Fixed &fixed);
 #endif
+
+/*
+--a;  // コンパイラ → operator--(void) を呼び出す
+a--;  // コンパイラ → operator--(int) を呼び出す
+
+*/

@@ -6,7 +6,7 @@
 /*   By: toruinoue <toruinoue@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/11 19:48:06 by torinoue          #+#    #+#             */
-/*   Updated: 2025/08/15 01:23:27 by toruinoue        ###   ########.fr       */
+/*   Updated: 2025/08/15 02:12:45 by toruinoue        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,10 @@ int main( void )
 		std::cout << "b * b = " << (b * b) << std::endl;
 		std::cout << "getRawBits(b * b) = " << (b * b).getRawBits() << std::endl;
 		std::cout << "a / b = " << (a / b) << std::endl;
+		
 		std::cout << "a / 0 = " << (a / 0) << std::endl;
+		return 0;
+		
 		std::cout << "a / 42 = " << (a / 42) << std::endl;
 		std::cout << "42 / a = " << (Fixed(42) / a) << std::endl;
 

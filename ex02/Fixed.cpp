@@ -14,6 +14,7 @@
 #include "Fixed.hpp"
 #include <climits>
 #include <cmath>
+#include <cstdlib>
 
 const int Fixed::_fractionalBits = 8;
 
@@ -51,11 +52,23 @@ Fixed::Fixed(const float floatingPointNumber){
 	
 	// 最小表現可能値のチェック（丸め処理前）
 	const float MIN_REPRESENTABLE = 1.0f / (1 << _fractionalBits);  // 1/256 = 0.00390625
+	const float BOUNDARY = MIN_REPRESENTABLE / 2.0f;  // 0.00390625 / 2 = 0.00195312
 	
 	if (floatingPointNumber != 0.0f && std::abs(floatingPointNumber) < MIN_REPRESENTABLE) {
+		float abs_input = std::abs(floatingPointNumber);
+		
 		std::cerr << ANSI_COLOR_YELLOW << "Warning: Input value " << floatingPointNumber 
-				  << " is smaller than minimum representable value " << MIN_REPRESENTABLE 
-				  << ". Value will be rounded to " << MIN_REPRESENTABLE << " or 0." << ANSI_COLOR_RESET << std::endl;
+				  << " (absolute value " << abs_input << ") is smaller than minimum representable value " 
+				  << MIN_REPRESENTABLE << " (1/" << (1 << _fractionalBits) << ")." << std::endl;
+		
+		if (abs_input < BOUNDARY) {
+			std::cerr << "         Since |" << floatingPointNumber << "| < " << BOUNDARY 
+					  << " (boundary = " << MIN_REPRESENTABLE << " / 2), value will be rounded to 0." << ANSI_COLOR_RESET << std::endl;
+		} else {
+			std::cerr << "         Since |" << floatingPointNumber << "| >= " << BOUNDARY 
+					  << " (boundary = " << MIN_REPRESENTABLE << " / 2), value will be rounded to " 
+					  << MIN_REPRESENTABLE << " (getRawBits = 1)." << ANSI_COLOR_RESET << std::endl;
+		}
 	}
 	
 	long long scaled_result = static_cast<long long>(roundf(floatingPointNumber * (1 << _fractionalBits)));
@@ -168,11 +181,13 @@ Fixed	Fixed::operator +(const Fixed &other) const{
 	long long result = static_cast<long long>(this->_value) + static_cast<long long>(other._value);
 	
 	if (result > INT_MAX) {
-		std::cerr << ANSI_COLOR_RED << "Warning: Addition result exceeds INT_MAX. Overflow occurred!" << ANSI_COLOR_RESET << std::endl;
+		std::cerr << ANSI_COLOR_RED << "Warning: Addition result " << result 
+				  << " exceeds INT_MAX (" << INT_MAX << "). Overflow occurred! Result clamped to INT_MAX." << ANSI_COLOR_RESET << std::endl;
 		result = INT_MAX;
 	}
 	else if (result < INT_MIN) {
-		std::cerr << ANSI_COLOR_RED << "Warning: Addition result is below INT_MIN. Underflow occurred!" << ANSI_COLOR_RESET << std::endl;
+		std::cerr << ANSI_COLOR_RED << "Warning: Addition result " << result 
+				  << " is below INT_MIN (" << INT_MIN << "). Underflow occurred! Result clamped to INT_MIN." << ANSI_COLOR_RESET << std::endl;
 		result = INT_MIN;
 	}
 	
@@ -186,11 +201,13 @@ Fixed	Fixed::operator -(const Fixed &other) const{
 	long long result = static_cast<long long>(this->_value) - static_cast<long long>(other._value);
 	
 	if (result > INT_MAX) {
-		std::cerr << ANSI_COLOR_RED << "Warning: Subtraction result exceeds INT_MAX. Overflow occurred!" << ANSI_COLOR_RESET << std::endl;
+		std::cerr << ANSI_COLOR_RED << "Warning: Subtraction result " << result 
+				  << " exceeds INT_MAX (" << INT_MAX << "). Overflow occurred! Result clamped to INT_MAX." << ANSI_COLOR_RESET << std::endl;
 		result = INT_MAX;
 	}
 	else if (result < INT_MIN) {
-		std::cerr << ANSI_COLOR_RED << "Warning: Subtraction result is below INT_MIN. Underflow occurred!" << ANSI_COLOR_RESET << std::endl;
+		std::cerr << ANSI_COLOR_RED << "Warning: Subtraction result " << result 
+				  << " is below INT_MIN (" << INT_MIN << "). Underflow occurred! Result clamped to INT_MIN." << ANSI_COLOR_RESET << std::endl;
 		result = INT_MIN;
 	}
 	
@@ -208,11 +225,13 @@ Fixed	Fixed::operator *(const Fixed &other) const{
 	
 	// オーバーフローチェック
 	if (result > INT_MAX) {
-		std::cerr << ANSI_COLOR_RED << "Warning: Multiplication result exceeds INT_MAX. Overflow occurred!" << ANSI_COLOR_RESET << std::endl;
+		std::cerr << ANSI_COLOR_RED << "Warning: Multiplication result " << result 
+				  << " exceeds INT_MAX (" << INT_MAX << "). Overflow occurred! Result clamped to INT_MAX." << ANSI_COLOR_RESET << std::endl;
 		result = INT_MAX;
 	}
 	else if (result < INT_MIN) {
-		std::cerr << ANSI_COLOR_RED << "Warning: Multiplication result is below INT_MIN. Underflow occurred!" << ANSI_COLOR_RESET << std::endl;
+		std::cerr << ANSI_COLOR_RED << "Warning: Multiplication result " << result 
+				  << " is below INT_MIN (" << INT_MIN << "). Underflow occurred! Result clamped to INT_MIN." << ANSI_COLOR_RESET << std::endl;
 		result = INT_MIN;
 	}
 	
@@ -227,7 +246,16 @@ Fixed	Fixed::operator /(const Fixed &other) const{
 		std::cerr << ANSI_COLOR_RED << "Error: Division by zero!" << ANSI_COLOR_RESET << std::endl;
 		// 課題書では「ゼロ除算でプログラムがクラッシュすることは許容される」
 		// ここでは警告を出してゼロを返す
-		return Fixed(0);
+		// return Fixed(0);
+		// クラッシュ用Dummyy演算
+		// int dummy = 1 / other.toInt();
+		int dummy = 1 / other.getRawBits();
+		std::cerr << "other.getRawBits() = " << other.getRawBits() << std::endl;
+		std::cerr << "dummy = " << dummy << std::endl;
+		
+		// 42の校舎でのレビュー時環境対応のため、スコープ末端にabort()を追加
+		std::abort();
+		return Fixed(dummy);
 	}
 	
 	// 通常の除算処理

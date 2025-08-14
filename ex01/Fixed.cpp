@@ -116,8 +116,6 @@ Fixed &Fixed::operator=(const Fixed &src)
 // float	Fixed::toFloat(void) 
 float	Fixed::toFloat(void) const
 {
-	std::cerr << ANSI_COLOR_BLUE << "  _value=" << "-----toFloat called-----" << ANSI_COLOR_RESET << std::endl;
-	// this->_value = 9999999;
 	return (static_cast<float>(this->_value) / (1 << _fractionalBits));
 }
 
@@ -126,30 +124,35 @@ int		Fixed::toInt(void) const
 	return (this->_value >> _fractionalBits);
 }
 
-// std::ostream &operator<<(std::ostream &str,  Fixed &fixed)
-std::ostream &operator<<(std::ostream &str, const Fixed fixed)
-// std::ostream &operator<<(std::ostream &str, const Fixed &fixed)
+std::ostream &operator<<(std::ostream &outputStream, const Fixed &fixed)
 {
-	return(str << fixed.toFloat());
+	return(outputStream << fixed.toFloat());
 }
 
+
 /*
-float	Fixed::toFloat(void) const
+std::ostream &operator<<(std::ostream &outputStream, const Fixed fixed)
 {
-	
-	std::cerr << ANSI_COLOR_BLUE << "  _value=" << this->_value << ANSI_COLOR_RESET << std::endl;
-	std::cerr << ANSI_COLOR_BLUE << "  static_cast<float>(this->_value)=" << static_cast<float>(this->_value) << ANSI_COLOR_RESET << std::endl;
-	// 両方の実装を計算
-	float method1 = (this->_value) / (1 << _fractionalBits);
-	float method2 = static_cast<float>(this->_value) / (1 << _fractionalBits);
-	
-	// 結果を出力して比較
-	std::cerr << ANSI_COLOR_BLUE << "  _value=" << this->_value 
-			  << " method1=" << std::fixed << std::setprecision(10) << method1
-			  << " method2=" << method2 
-			  << " diff=" << (method1 - method2) << ANSI_COLOR_RESET << std::endl;
-	
-	// 現在使用している実装を返す
-	return method2;
+	return(outputStream << fixed.toFloat());
+
+*/
+
+
+
+
+
+
+
+
+
+
+/*
+std::ostream &operator<<(std::ostream &outputStream, const Fixed* fixed)
+{
+	if (fixed == NULL) {
+		return(outputStream << "NULL");
+	}
+	return(outputStream << fixed->toFloat());
 }
+
 */

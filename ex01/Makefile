@@ -1,10 +1,7 @@
 NAME = fixed_01_useful
-# NAME = int_test
 CXX = c++
 CXXFLAGS = -Wall -Wextra -Werror -std=c++98
 SRCS = 	main.cpp \
-		Fixed.cpp \
-# SRCS = 	int_test.cpp \
 		Fixed.cpp \
 
 MAKE = make

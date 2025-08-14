@@ -103,16 +103,21 @@ void Fixed::setRawBits( int const raw )
 	this->_value = raw;
 }
 
-Fixed &Fixed::operator=(const Fixed &src) {
+Fixed &Fixed::operator=(const Fixed &src)
+{
 	std::cout << "Fixed Copy Assignment Operator called" << std::endl;
-	if (this != &src) {
+	if (this != &src)
+	{
 		this->_value = src.getRawBits();
 	}
 	return *this;
 }
 
+// float	Fixed::toFloat(void) 
 float	Fixed::toFloat(void) const
 {
+	std::cerr << ANSI_COLOR_BLUE << "  _value=" << "-----toFloat called-----" << ANSI_COLOR_RESET << std::endl;
+	// this->_value = 9999999;
 	return (static_cast<float>(this->_value) / (1 << _fractionalBits));
 }
 
@@ -121,7 +126,9 @@ int		Fixed::toInt(void) const
 	return (this->_value >> _fractionalBits);
 }
 
-std::ostream &operator<<(std::ostream &str, const Fixed &fixed)
+// std::ostream &operator<<(std::ostream &str,  Fixed &fixed)
+std::ostream &operator<<(std::ostream &str, const Fixed fixed)
+// std::ostream &operator<<(std::ostream &str, const Fixed &fixed)
 {
 	return(str << fixed.toFloat());
 }

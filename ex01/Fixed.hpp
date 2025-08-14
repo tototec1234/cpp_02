@@ -27,6 +27,7 @@ class Fixed
 
 		int		getRawBits( void ) const;
 		void 	setRawBits( int const raw );
+		// float	toFloat(void) ;
 		float	toFloat(void) const;
 		int		toInt(void) const;
 
@@ -39,6 +40,8 @@ class Fixed
 //	And add the following function to the Fixed class files:
 // An overload of the insertion («) operator that inserts a floating-point representation
 // of the fixed-point number into the output stream object passed as a parameter.
-std::ostream &operator<<(std::ostream &str, const Fixed &fixed);
+// std::ostream &operator<<(std::ostream &str,  Fixed &fixed);
+std::ostream &operator<<(std::ostream &str, const Fixed fixed);
+// std::ostream &operator<<(std::ostream &str, const Fixed &fixed);
 
 #endif

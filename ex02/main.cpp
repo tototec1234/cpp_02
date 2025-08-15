@@ -15,7 +15,6 @@
 #include "Fixed.hpp"
 #include <climits>
 
-// Function prototypes
 void test_subject();
 void test_arithmetic_operations();
 void test_boundary_values();

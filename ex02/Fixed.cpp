@@ -6,7 +6,7 @@
 /*   By: torinoue <torinoue@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/11 19:48:18 by torinoue          #+#    #+#             */
-/*   Updated: 2025/08/15 16:36:35 by torinoue         ###   ########.fr       */
+/*   Updated: 2025/08/15 18:10:29 by torinoue         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,10 +61,12 @@ Fixed::Fixed(const float floatingPointNumber){
 
 		if (abs_input < BOUNDARY) {
 			std::cerr << "         Since |" << floatingPointNumber << "| < " << BOUNDARY 
-					  << " (boundary = " << MIN_REPRESENTABLE << " / 2   exact value unaffected by std::cout is 0.001953125), \n          value will be rounded to 0." << ANSI_COLOR_RESET << std::endl;
+					  << " (boundary = " << MIN_REPRESENTABLE << " / 2   exact value unaffected by std::cout is 0.001953125),"
+					  << "\n          value will be rounded to 0." << ANSI_COLOR_RESET << std::endl;
 		} else {
 			std::cerr << "         Since |" << floatingPointNumber << "| >= " << BOUNDARY 
-					  << " (boundary = " << MIN_REPRESENTABLE << " / 2   exact value unaffected by std::cout is 0.001953125),\n          value will be rounded to " 
+					  << " (boundary = " << MIN_REPRESENTABLE << " / 2   exact value unaffected by std::cout is 0.001953125),"
+					  << "\n          value will be rounded to " 
 					  << MIN_REPRESENTABLE << " (getRawBits = 1)." << ANSI_COLOR_RESET << std::endl;
 		}
 	}

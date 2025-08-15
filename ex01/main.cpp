@@ -6,7 +6,7 @@
 /*   By: torinoue <torinoue@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/11 19:48:06 by torinoue          #+#    #+#             */
-/*   Updated: 2025/08/15 15:19:30 by torinoue         ###   ########.fr       */
+/*   Updated: 2025/08/15 18:07:41 by torinoue         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,18 +120,18 @@ void test_integer_overflow() {
 	std::cout << ANSI_COLOR_CYAN << "\n=== 整数オーバーフロー/アンダーフローテスト ===" << ANSI_COLOR_RESET << std::endl;
 	{
 		std::cout << ANSI_COLOR_GREEN << "正常範囲の値: 8388607 (INT_MAX/256), -8388608 (INT_MIN/256)" << ANSI_COLOR_RESET << std::endl;
-		Fixed safe_max(8388607);  // INT_MAX / 256 = 8388607
-		Fixed safe_min(-8388608); // INT_MIN / 256 = -8388608
-		std::cout << "safe_max: " << safe_max << std::endl;
-		std::cout << "safe_min: " << safe_min << std::endl;
+		Fixed safe_max(8388607);
+		Fixed safe_min(-8388608);
+		std::cout << "safe_max: " << safe_max << " 2^(31-8)-1"<< std::endl;
+		std::cout << "safe_min: " << safe_min << "-2^(31-8)"<< std::endl;
 
 		std::cout << ANSI_COLOR_MAGENTA << "オーバーフロー値: 8388608 (INT_MAX/256 + 1)" << ANSI_COLOR_RESET << std::endl;
-		Fixed overflow_test(8388608);  // INT_MAX / 256 + 1
-		std::cout << "overflow_test: " << overflow_test << std::endl;
+		Fixed overflow_test(8388608);
+		std::cout << "overflow_test: " << overflow_test <<  " 2^(31-8)-1+1"<<std::endl;
 
 		std::cout << ANSI_COLOR_MAGENTA << "アンダーフロー値: -8388609 (INT_MIN/256 - 1)" << ANSI_COLOR_RESET << std::endl;
-		Fixed underflow_test(-8388609); // INT_MIN / 256 - 1
-		std::cout << "underflow_test: " << underflow_test << std::endl;
+		Fixed underflow_test(-8388609);
+		std::cout << "underflow_test: " << underflow_test <<  "-2^(31-8)-1"<<std::endl;
 	}
 }
 

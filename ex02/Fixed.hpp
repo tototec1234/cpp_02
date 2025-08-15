@@ -6,7 +6,7 @@
 /*   By: torinoue <torinoue@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/11 19:48:18 by torinoue          #+#    #+#             */
-/*   Updated: 2025/08/15 14:58:46 by torinoue         ###   ########.fr       */
+/*   Updated: 2025/08/15 18:14:13 by torinoue         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,9 +40,6 @@ class Fixed
 		static const Fixed &min(const Fixed &a, const Fixed &b);
 		static const Fixed &max(const Fixed &a, const Fixed &b);
 
-
-
-
 	// Overloaded Operators
 		/* Assignment operator */
 		Fixed &operator=(const Fixed &src);
@@ -66,7 +63,6 @@ class Fixed
 		Fixed	&operator --(void);
 		Fixed	operator ++(int);
 		Fixed	operator --(int);
-
 
 	private:
 		int _value;

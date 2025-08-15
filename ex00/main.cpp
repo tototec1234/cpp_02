@@ -16,13 +16,51 @@
 
 int main( void )
 {
-	Fixed a;
-	Fixed b( a );
-	Fixed c;
-	std::cerr << ANSI_COLOR_BLUE << "Command: c = b;" << ANSI_COLOR_RESET << std::endl;
-	c = b;
-	std::cout << a.getRawBits() << std::endl;
-	std::cout << b.getRawBits() << std::endl;
-	std::cout << c.getRawBits() << std::endl;
+	{
+		std::cout << ANSI_COLOR_CYAN << "\n=== 元の課題書テスト ===" << ANSI_COLOR_RESET << std::endl;
+		Fixed a;
+		Fixed b( a );
+		Fixed c;
+
+		std::cerr << ANSI_COLOR_BLUE << "Command: c = b;" << ANSI_COLOR_RESET << std::endl;
+
+		c = b;
+		std::cout << a.getRawBits() << std::endl;
+		std::cout << b.getRawBits() << std::endl;
+		std::cout << c.getRawBits() << std::endl;
+	}
+	{
+		std::cout << ANSI_COLOR_CYAN << "\n=== const型のテスト ===" << ANSI_COLOR_RESET << std::endl;
+		Fixed a;
+		const Fixed b( a );
+		Fixed c;
+		const Fixed d( c );
+
+		std::cerr << ANSI_COLOR_BLUE << "Command: c = b;" << ANSI_COLOR_RESET << std::endl;
+
+		c = b;
+		std::cout << a.getRawBits() << std::endl;
+		std::cout << b.getRawBits() << std::endl;
+		std::cout << c.getRawBits() << std::endl;
+		std::cout << d.getRawBits() << std::endl;
+	}
 	return 0;
 }
+
+/*
+	{
+		std::cout << ANSI_COLOR_CYAN << "\n=== const型のテスト ===" << ANSI_COLOR_RESET << std::endl;
+		Fixed a;
+		const Fixed b( a );
+		constFixed c;
+		const Fixed d( c );
+
+		std::cerr << ANSI_COLOR_BLUE << "Command: c = b;" << ANSI_COLOR_RESET << std::endl;
+
+		b = a;
+		std::cout << a.getRawBits() << std::endl;
+		std::cout << b.getRawBits() << std::endl;
+		std::cout << c.getRawBits() << std::endl;
+		std::cout << d.getRawBits() << std::endl;
+	}
+*/

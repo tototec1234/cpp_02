@@ -27,7 +27,7 @@ void test_std_min_comparison();
 
 int main(void) {
 	int choice;
-	
+
 	while (true) {
 		std::cout << "\nSelect a test to run (選択してテストを実行):\n";
 		std::cout << "1. Subject Tests (課題書のテスト)\n";
@@ -40,14 +40,14 @@ int main(void) {
 		std::cout << "8. std::min Comparison Tests (std::min比較テスト)\n";
 		std::cout << "0. Exit (終了)\n";
 		std::cout << "Enter your choice (選択してください): ";
-		
+
 		if (!(std::cin >> choice)) {
 			std::cout << "Invalid input. Please enter a number.\n";
 			std::cin.clear();
 			std::cin.ignore(10000, '\n');
 			continue;
 		}
-		
+
 		switch (choice) {
 			case 0:
 				return 0;
@@ -87,21 +87,21 @@ void test_subject() {
 
 	Fixed a;
 	Fixed const b( Fixed( 5.05f ) * Fixed( 2 ) );
-	
+
 	std::cout << a << std::endl;
 	std::cout << ++a << std::endl; 
 	std::cout << a << std::endl;
 	std::cout << a++ << std::endl;
 	std::cout << a << std::endl;
-	
+
 	std::cout << b << std::endl;
-	
+
 	std::cout << Fixed::max( a, b ) << std::endl;
 }
 
 void test_arithmetic_operations() {
 	std::cout << "\n算術演算子のテスト:" << std::endl;
-	
+
 	Fixed a(2898.31f);  // sqrt(MAX_SAFE_INT) + 1
 	Fixed b(2897.31f);  // sqrt(MAX_SAFE_INT)
 	Fixed c(5.25f);
@@ -125,7 +125,7 @@ void test_arithmetic_operations() {
 	std::cout << "b * b = " << (b * b) << std::endl;
 	std::cout << "getRawBits(b * b) = " << (b * b).getRawBits() << std::endl;
 	std::cout << "a / b = " << (a / b) << std::endl;
-	
+
 	std::cout << "a / 42 = " << (a / 42) << std::endl;
 	std::cout << "42 / a = " << (Fixed(42) / a) << std::endl;
 	std::cout << "getRawBits(a) = " << a.getRawBits() << std::endl;
@@ -139,30 +139,30 @@ void test_arithmetic_operations() {
 
 void test_boundary_values() {
 	std::cout << "\n=== 境界値テスト（ゼロ丸めと最小値丸め） ===" << std::endl;
-	
+
 	const float MIN_REPRESENTABLE = 1.0f / 256.0f;  // 0.00390625
 	const float BOUNDARY = MIN_REPRESENTABLE / 2.0f;  // 0.001953125
-	
+
 	std::cout << "最小表現可能値: " << MIN_REPRESENTABLE << std::endl;
 	std::cout << "境界値: " << BOUNDARY << std::endl;
-	
+
 	float zero_rounded_max = BOUNDARY - 0.0000001f;  // 0.0019531149
 	std::cout << "\n1. ゼロに丸められる最大の値:" << std::endl;
 	std::cout << "入力値: " << zero_rounded_max << std::endl;
 	Fixed zero_test(zero_rounded_max);
 	std::cout << "結果: " << zero_test << " (getRawBits = " << zero_test.getRawBits() << ")" << std::endl;
-	
+
 	std::cout << "\n2. 最小値に丸められる最小の値（境界値ちょうど）:" << std::endl;
 	std::cout << "入力値: " << BOUNDARY << std::endl;
 	Fixed min_test(BOUNDARY);
 	std::cout << "結果: " << min_test << " (getRawBits = " << min_test.getRawBits() << ")" << std::endl;
-	
+
 	float slightly_above = BOUNDARY + 0.0000001f;  // 0.0019531351
 	std::cout << "\n3. 境界値より少し大きい値:" << std::endl;
 	std::cout << "入力値: " << slightly_above << std::endl;
 	Fixed above_test(slightly_above);
 	std::cout << "結果: " << above_test << " (getRawBits = " << above_test.getRawBits() << ")" << std::endl;
-	
+
 	if (min_test.getRawBits() != 0) {
 		std::cout << "\n4. 境界値での除算テスト:" << std::endl;
 		std::cout << "a / 境界値 = " << (Fixed(2898.31f) / min_test) << std::endl;
@@ -170,20 +170,20 @@ void test_boundary_values() {
 	if (above_test.getRawBits() != 0) {
 		std::cout << "a / 境界値+ε = " << (Fixed(2898.31f) / above_test) << std::endl;
 	}
-	
+
 	std::cout << "\n=== 数学的に正確な境界値テスト ===" << std::endl;
-	
+
 	float precise_boundary_minus = 0.0019531249f;
 	float precise_boundary_plus = 0.0019531251f;
-	
+
 	std::cout << "境界値の直前: " << precise_boundary_minus << std::endl;
 	std::cout << "境界値ちょうど: " << BOUNDARY << std::endl;
 	std::cout << "境界値の直後: " << precise_boundary_plus << std::endl;
-	
+
 	Fixed precise_minus(precise_boundary_minus);
 	Fixed precise_exact(BOUNDARY);
 	Fixed precise_plus(precise_boundary_plus);
-	
+
 	std::cout << "\n境界値-1ULP: " << precise_minus << " (getRawBits = " << precise_minus.getRawBits() << ")" << std::endl;
 	std::cout << "境界値ちょうど: " << precise_exact << " (getRawBits = " << precise_exact.getRawBits() << ")" << std::endl;
 	std::cout << "境界値+1ULP: " << precise_plus << " (getRawBits = " << precise_plus.getRawBits() << ")" << std::endl;
@@ -195,25 +195,25 @@ void test_boundary_values() {
 
 void test_overflow_cases() {
 	std::cout << "\n=== オーバーフローケーステスト ===" << std::endl;
-	
+
 	Fixed a(2898.31f);
-	
+
 	std::cout << "ゼロ除算テスト:" << std::endl;
 	std::cout << "a / 0 = " << (a / 0) << std::endl;
-	
+
 	std::cout << "\n大きな値のテスト:" << std::endl;
 	Fixed large1(32767.0f);  // 最大値に近い値
 	Fixed large2(32766.0f);
-	
+
 	std::cout << "large1 = " << large1 << std::endl;
 	std::cout << "large2 = " << large2 << std::endl;
 	std::cout << "large1 + large2 = " << (large1 + large2) << std::endl;
 	std::cout << "large1 * large2 = " << (large1 * large2) << std::endl;
-	
+
 	std::cout << "\n負の値のテスト:" << std::endl;
 	Fixed neg1(-32767.0f);
 	Fixed neg2(-1.0f);
-	
+
 	std::cout << "neg1 = " << neg1 << std::endl;
 	std::cout << "neg2 = " << neg2 << std::endl;
 	std::cout << "neg1 + neg2 = " << (neg1 + neg2) << std::endl;
@@ -252,7 +252,7 @@ void test_const_min_max() {
 
 void test_non_const_min_max() {
 	std::cout << "\n非constオブジェクトでのmin/maxのテスト:" << std::endl;
-	
+
 	Fixed a(10);
 	Fixed b(20);
 	Fixed c(10);
@@ -264,7 +264,7 @@ void test_non_const_min_max() {
 	std::cout << "max(a, b) = " << Fixed::max(a, b) << std::endl;
 	std::cout << "min(a, c) = " << Fixed::min(a, c) << std::endl;
 	std::cout << "max(a, c) = " << Fixed::max(a, c) << std::endl;
-	
+
 	std::cout << std::endl;
 	std::cout << "&a = " << &a << std::endl;
 	std::cout << "&b = " << &b << std::endl;
@@ -287,14 +287,14 @@ void test_std_min_comparison() {
 	std::cout << "                 int_a = " << int_a << "                   &int_a = " << &int_a << std::endl;
 	std::cout << "                 int_b = " << int_b << "                   &int_b = " << &int_b << std::endl;
 	std::cout << "std::min(int_a, int_b) = " << std::min(int_a, int_b) << "  &std::min(int_a, int_b) = " << &std::min(int_a, int_b) << std::endl;
-	
+
 	std::cout << std::endl;
 
 	std::cout << "\nFixed::minとstd::minの比較テスト - アドレス確認" << std::endl;
 	std::cout << "注: Fixed::minは等値の場合、第一引数を返す" << std::endl;
 	Fixed a(10);
 	Fixed b(10);
-	
+
 	std::cout << "                     a = " << a << "                       &a = " << &a << std::endl;
 	std::cout << "                     b = " << b << "                       &b = " << &b << std::endl;
 	std::cout << "             min(a, b) = " << Fixed::min(a,b) << "               &min(a, b) = " << &Fixed::min(a, b) << std::endl;

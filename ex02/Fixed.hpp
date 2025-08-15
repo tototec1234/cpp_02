@@ -6,7 +6,7 @@
 /*   By: toruinoue <toruinoue@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/11 19:48:18 by torinoue          #+#    #+#             */
-/*   Updated: 2025/08/14 15:10:43 by toruinoue        ###   ########.fr       */
+/*   Updated: 2025/08/15 12:47:16 by toruinoue        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ class Fixed
 		/* Getters and setters */
 		int		getRawBits( void ) const;
 		void 	setRawBits( int const raw );
-		
+
 		/* Conversion functions */
 		float	toFloat(void) const;
 		int		toInt(void) const;
@@ -39,7 +39,7 @@ class Fixed
 		static Fixed &max(Fixed &a, Fixed &b);
 		static const Fixed &min(const Fixed &a, const Fixed &b);
 		static const Fixed &max(const Fixed &a, const Fixed &b);
-		
+
 
 
 
@@ -67,7 +67,7 @@ class Fixed
 		Fixed	operator ++(int);
 		Fixed	operator --(int);
 
-	
+
 	private:
 		int _value;
 		static const int _fractionalBits;

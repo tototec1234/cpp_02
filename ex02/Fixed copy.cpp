@@ -29,10 +29,10 @@ Fixed::Fixed(const Fixed & src){
 
 Fixed::Fixed(const int integer): _value(integer << _fractionalBits){
 	// std::cerr << ANSI_COLOR_YELLOW << "Fixed Integer Constructor called" << ANSI_COLOR_RESET << std::endl;
-	
+
 	const int MAX_SAFE_INT = INT_MAX / (1 << _fractionalBits);
 	const int MIN_SAFE_INT = INT_MIN / (1 << _fractionalBits);
-	
+
 	if (integer > MAX_SAFE_INT) {
 		std::cerr << ANSI_COLOR_RED << "Warning: Integer " << integer 
 				  << " exceeds maximum safe value " << MAX_SAFE_INT 
@@ -49,20 +49,20 @@ Fixed::Fixed(const int integer): _value(integer << _fractionalBits){
 Fixed::Fixed(const float floatingPointNumber){
 	// std::cerr << ANSI_COLOR_YELLOW << "Fixed Float Constructor called" << ANSI_COLOR_RESET << std::endl;
 	// std::cerr << ANSI_COLOR_YELLOW << "			floatingPointNumber=" << floatingPointNumber << ANSI_COLOR_RESET << std::endl;
-	
+
 	// 最小表現可能値のチェック（丸め処理前）
 	const float MIN_REPRESENTABLE = 1.0f / (1 << _fractionalBits);  // 1/256 = 0.00390625
-	
+
 	if (floatingPointNumber != 0.0f && std::abs(floatingPointNumber) < MIN_REPRESENTABLE) {
 		std::cerr << ANSI_COLOR_YELLOW << "Warning: Input value " << floatingPointNumber 
 				  << " is smaller than minimum representable value " << MIN_REPRESENTABLE 
 				  << ". Value will be rounded to " << MIN_REPRESENTABLE << " or 0." << ANSI_COLOR_RESET << std::endl;
 	}
-	
+
 	long long scaled_result = static_cast<long long>(roundf(floatingPointNumber * (1 << _fractionalBits)));
-	
+
 	// std::cerr << ANSI_COLOR_BLUE << "			scaled_result (long long)=" << scaled_result << ANSI_COLOR_RESET << std::endl;
-	
+
 	if (scaled_result > INT_MAX) {
 		std::cerr << ANSI_COLOR_RED << "		Warning: Rounded result " << scaled_result 
 				  << " exceeds INT_MAX (" << INT_MAX << "). Overflow occurred!" << ANSI_COLOR_RESET << std::endl;
@@ -76,7 +76,7 @@ Fixed::Fixed(const float floatingPointNumber){
 	else {
 		_value = static_cast<int>(scaled_result);
 	}
-	
+
 	// if (scaled_result > 0) {
 	// 	std::cerr << ANSI_COLOR_BLUE << "			Difference from INT_MAX  =" << INT_MAX - scaled_result << std::endl;
 	// } else {
@@ -85,7 +85,7 @@ Fixed::Fixed(const float floatingPointNumber){
 	// std::cerr << ANSI_COLOR_BLUE << "			final _value=" << _value << ANSI_COLOR_RESET << std::endl;
 
 }
-		
+
 Fixed::~Fixed(){
     // std::cerr << ANSI_COLOR_RED << "Fixed Destructor called" << ANSI_COLOR_RESET << std::endl;
 }
@@ -179,7 +179,7 @@ Fixed	Fixed::operator -(const Fixed &other) const{
 Fixed	Fixed::operator *(const Fixed &other) const{
 	long long result = static_cast<long long>(this->_value) * static_cast<long long>(other._value);
 	result >>= _fractionalBits;
-	
+
 	Fixed resultFixed;
 	resultFixed.setRawBits(static_cast<int>(result));
 	return resultFixed;
@@ -191,7 +191,7 @@ Fixed	Fixed::operator /(const Fixed &other) const{
 		// 課題書では「ゼロ除算でプログラムがクラッシュすることは許容される」
 		return Fixed(0);
 	}
-	
+
 	return Fixed(this->toFloat() / other.toFloat());
 }
 

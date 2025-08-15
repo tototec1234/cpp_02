@@ -22,15 +22,15 @@ int main( void )
 
 		Fixed a;
 		Fixed const b( Fixed( 5.05f ) * Fixed( 2 ) );
-		
+
 		std::cout << a << std::endl;
 		std::cout << ++a << std::endl; 
 		std::cout << a << std::endl;
 		std::cout << a++ << std::endl;
 		std::cout << a << std::endl;
-		
+
 		std::cout << b << std::endl;
-		
+
 		std::cout << Fixed::max( a, b ) << std::endl;
 	}
 	// return 0;
@@ -41,11 +41,11 @@ int main( void )
 		// sqrt(8388607) = 2896.31... → Fixed型で2897.31として表示される
 		Fixed a(2898.31f);  // sqrt(MAX_SAFE_INT) + 1
 		Fixed b(2897.31f);  // sqrt(MAX_SAFE_INT)
-		
+
 		// レビュー時の値の根拠確認用（禁止関数使用のためコメントアウト）
 		// Fixed a(static_cast<float>(sqrt(MAX_SAFE_INT)) + 1);
 		// Fixed b(static_cast<float>(sqrt(MAX_SAFE_INT)));
-		
+
 		Fixed c(5.25f);
 
 		std::cout << "a = sqrt(MAX_SAFE_INT) + 1 = " << a << std::endl;
@@ -67,10 +67,10 @@ int main( void )
 		std::cout << "b * b = " << (b * b) << std::endl;
 		std::cout << "getRawBits(b * b) = " << (b * b).getRawBits() << std::endl;
 		std::cout << "a / b = " << (a / b) << std::endl;
-		
+
 		std::cout << "a / 0 = " << (a / 0) << std::endl;
 		// return 0;
-		
+
 		std::cout << "a / 42 = " << (a / 42) << std::endl;
 		std::cout << "42 / a = " << (Fixed(42) / a) << std::endl;
 
@@ -83,34 +83,34 @@ int main( void )
 		std::cout << "a / 0.00390625  = " << (a / (1/256.0f)) << std::endl;
 		// std::cout << "a / 0.00390624  = " << (a / (1/256.0f - 0.00000001f)) << std::endl;
 		std::cout << "\n=== 境界値テスト（ゼロ丸めと最小値丸め） ===" << std::endl;
-		
+
 		// Fixed型の最小表現可能値の半分が境界値
 		const float MIN_REPRESENTABLE = 1.0f / 256.0f;  // 0.00390625
 		const float BOUNDARY = MIN_REPRESENTABLE / 2.0f;  // 0.001953125
-		
+
 		std::cout << "最小表現可能値: " << MIN_REPRESENTABLE << std::endl;
 		std::cout << "境界値: " << BOUNDARY << std::endl;
-		
+
 		// ゼロに丸められる最大の値（境界値未満）
 		float zero_rounded_max = BOUNDARY - 0.0000001f;  // 0.0019531149
 		std::cout << "\n1. ゼロに丸められる最大の値:" << std::endl;
 		std::cout << "入力値: " << zero_rounded_max << std::endl;
 		Fixed zero_test(zero_rounded_max);
 		std::cout << "結果: " << zero_test << " (getRawBits = " << zero_test.getRawBits() << ")" << std::endl;
-		
+
 		// 最小値に丸められる最小の値（境界値ちょうど）
 		std::cout << "\n2. 最小値に丸められる最小の値（境界値ちょうど）:" << std::endl;
 		std::cout << "入力値: " << BOUNDARY << std::endl;
 		Fixed min_test(BOUNDARY);
 		std::cout << "結果: " << min_test << " (getRawBits = " << min_test.getRawBits() << ")" << std::endl;
-		
+
 		// 境界値より少し大きい値
 		float slightly_above = BOUNDARY + 0.0000001f;  // 0.0019531351
 		std::cout << "\n3. 境界値より少し大きい値:" << std::endl;
 		std::cout << "入力値: " << slightly_above << std::endl;
 		Fixed above_test(slightly_above);
 		std::cout << "結果: " << above_test << " (getRawBits = " << above_test.getRawBits() << ")" << std::endl;
-		
+
 		// 除算テスト（ゼロ除算回避のため、ゼロでない値のみテスト）
 		if (min_test.getRawBits() != 0) {
 			std::cout << "\n4. 境界値での除算テスト:" << std::endl;
@@ -119,30 +119,30 @@ int main( void )
 		if (above_test.getRawBits() != 0) {
 			std::cout << "a / 境界値+ε = " << (a / above_test) << std::endl;
 		}
-		
+
 		std::cout << "\n=== 数学的に正確な境界値テスト ===" << std::endl;
-		
+
 		// nextafter()の計算結果をハードコーディング
 		// BOUNDARY = 0.001953125f
 		float precise_boundary_minus = 0.0019531249f;  // nextafter(BOUNDARY, 0.0f)の近似値
 		float precise_boundary_plus = 0.0019531251f;   // nextafter(BOUNDARY, 1.0f)の近似値
-		
+
 		// レビュー時の値の根拠確認用（禁止関数使用のためコメントアウト）
 		// float precise_boundary_minus = nextafter(BOUNDARY, 0.0f);
 		// float precise_boundary_plus = nextafter(BOUNDARY, 1.0f);
-		
+
 		std::cout << "境界値の直前: " << precise_boundary_minus << std::endl;
 		std::cout << "境界値ちょうど: " << BOUNDARY << std::endl;
 		std::cout << "境界値の直後: " << precise_boundary_plus << std::endl;
-		
+
 		Fixed precise_minus(precise_boundary_minus);
 		Fixed precise_exact(BOUNDARY);
 		Fixed precise_plus(precise_boundary_plus);
-		
+
 		std::cout << "\n境界値-1ULP: " << precise_minus << " (getRawBits = " << precise_minus.getRawBits() << ")" << std::endl;
 		std::cout << "境界値ちょうど: " << precise_exact << " (getRawBits = " << precise_exact.getRawBits() << ")" << std::endl;
 		std::cout << "境界値+1ULP: " << precise_plus << " (getRawBits = " << precise_plus.getRawBits() << ")" << std::endl;
-		
+
 		// return 0;
 		// 0.00390625
 		// 0.00000001f
@@ -186,26 +186,26 @@ int main( void )
 	// return 0;
 	{
 		std::cout << "\n非constオブジェクトでのmin/maxのテスト:" << std::endl;
-		
+
 		Fixed a(10);
 		Fixed b(20);
 		Fixed c(10);
 		std::cout << "a = " << a << std::endl;
 		std::cout << "b = " << b << std::endl;
 		std::cout << "c = " << c << std::endl;
-	
+
 		std::cout << "min(a, b) = " << Fixed::min(a, b) << std::endl;
 		std::cout << "max(a, b) = " << Fixed::max(a, b) << std::endl;
 		std::cout << "min(a, c) = " << Fixed::min(a, c) << std::endl;
 		std::cout << "max(a, c) = " << Fixed::max(a, c) << std::endl;
-		
+
 		std::cout << std::endl;
 		std::cout << "&a = " << &a << std::endl;
 		std::cout << "&b = " << &b << std::endl;
 		std::cout << "&c = " << &c << std::endl;
-	
+
 		std::cout << "&max(a, c) = " << &Fixed::max(a, c) << std::endl;
-	
+
 		std::cout << std::endl;
 		std::cout << "a.getRawBits() = " << a.getRawBits() << std::endl;
 		std::cout << "b.getRawBits() = " << b.getRawBits() << std::endl;
@@ -221,14 +221,14 @@ int main( void )
 		std::cout << "                 int_a = " << int_a << "                   &int_a = " << &int_a << std::endl;
 		std::cout << "                 int_b = " << int_b << "                   &int_b = " << &int_b << std::endl;
 		std::cout << "std::min(int_a, int_b) = " << std::min(int_a, int_b) << "  &std::min(int_a, int_b) = " << &std::min(int_a, int_b) << std::endl;
-		
+
 		std::cout << std::endl;
 
 		std::cout << "\nFixed::minとstd::minの比較テスト - アドレス確認" << std::endl;
 		std::cout << "注: Fixed::minは等値の場合、第一引数を返す" << std::endl;
 		Fixed a(10);
 		Fixed b(10);
-		
+
 		std::cout << "                     a = " << a << "                       &a = " << &a << std::endl;
 		std::cout << "                     b = " << b << "                       &b = " << &b << std::endl;
 		std::cout << "             min(a, b) = " << Fixed::min(a,b) << "               &min(a, b) = " << &Fixed::min(a, b) << std::endl;

@@ -1,7 +1,0 @@
-レビューのキーワード
-insertion operatorのすべての標準定義
-
-insetion operatorの引数の取り方（『左辺引数』、『右辺引数』）
-insertion operatorの『左結合演算子』としての働き 
-extraction operator
-extraction operator

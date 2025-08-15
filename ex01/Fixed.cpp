@@ -14,27 +14,25 @@
 #include "Fixed.hpp"
 #include <iomanip>
 #include <climits>
+#include <cmath>    // 課題許可関数: roundf のみ使用
 
 const int Fixed::_fractionalBits = 8;
 
-Fixed::Fixed() : _value(0)
-{
-    std::cerr << ANSI_COLOR_YELLOW << "Fixed Default Constructor called" << ANSI_COLOR_RESET << std::endl;
+Fixed::Fixed() : _value(0){
+	std::cerr << ANSI_COLOR_YELLOW << "Fixed Default Constructor called" << ANSI_COLOR_RESET << std::endl;
 }
 
-Fixed::Fixed(const Fixed & src)
-{
-    std::cerr << ANSI_COLOR_YELLOW << "Fixed Copy Constructor called" << ANSI_COLOR_RESET << std::endl;
-    *this = src;
+Fixed::Fixed(const Fixed & src){
+	std::cerr << ANSI_COLOR_YELLOW << "Fixed Copy Constructor called" << ANSI_COLOR_RESET << std::endl;
+	*this = src;
 }
 
-Fixed::Fixed(const int integer): _value(integer << _fractionalBits)
-{
+Fixed::Fixed(const int integer): _value(integer << _fractionalBits){
 	std::cerr << ANSI_COLOR_YELLOW << "Fixed Integer Constructor called" << ANSI_COLOR_RESET << std::endl;
-	
+
 	const int MAX_SAFE_INT = INT_MAX / (1 << _fractionalBits);
 	const int MIN_SAFE_INT = INT_MIN / (1 << _fractionalBits);
-	
+
 	if (integer > MAX_SAFE_INT) {
 		std::cerr << ANSI_COLOR_RED << "Warning: Integer " << integer 
 				  << " exceeds maximum safe value " << MAX_SAFE_INT 
@@ -47,14 +45,35 @@ Fixed::Fixed(const int integer): _value(integer << _fractionalBits)
 	}
 }
 
-
-Fixed::Fixed(const float floatingPointNumber)
-{
+Fixed::Fixed(const float floatingPointNumber){
 	std::cerr << ANSI_COLOR_YELLOW << "Fixed Float Constructor called" << ANSI_COLOR_RESET << std::endl;
 	// std::cerr << ANSI_COLOR_YELLOW << "			floatingPointNumber=" << floatingPointNumber << ANSI_COLOR_RESET << std::endl;
-	
+
+	// 最小表現可能値のチェック（丸め処理前）
+	const float MIN_REPRESENTABLE = 1.0f / (1 << _fractionalBits);  // 1/256 = 0.00390625
+	const float BOUNDARY = MIN_REPRESENTABLE / 2.0f;  // 0.00390625 / 2 = 0.00195312
+
+	// 課題制約: std::abs使用不可のため、独自実装で絶対値計算
+	float abs_input = (floatingPointNumber < 0.0f) ? -floatingPointNumber : floatingPointNumber;
+
+	if (floatingPointNumber != 0.0f && abs_input < MIN_REPRESENTABLE) {
+
+		std::cerr << ANSI_COLOR_YELLOW << "Warning: Input value " << floatingPointNumber 
+				  << " (absolute value " << abs_input << ") is smaller than minimum representable value " 
+				  << MIN_REPRESENTABLE << " (1/" << (1 << _fractionalBits) << ")." << std::endl;
+
+		if (abs_input < BOUNDARY) {
+			std::cerr << "         Since |" << floatingPointNumber << "| < " << BOUNDARY 
+					  << " (boundary = " << MIN_REPRESENTABLE << " / 2), value will be rounded to 0." << ANSI_COLOR_RESET << std::endl;
+		} else {
+			std::cerr << "         Since |" << floatingPointNumber << "| >= " << BOUNDARY 
+					  << " (boundary = " << MIN_REPRESENTABLE << " / 2), value will be rounded to " 
+					  << MIN_REPRESENTABLE << " (getRawBits = 1)." << ANSI_COLOR_RESET << std::endl;
+		}
+	}
+
 	long long scaled_result = static_cast<long long>(roundf(floatingPointNumber * (1 << _fractionalBits)));
-		
+
 	if (scaled_result > INT_MAX) {
 		std::cerr << ANSI_COLOR_RED << "		Warning: Rounded result " << scaled_result 
 				  << " exceeds INT_MAX (" << INT_MAX << "). Overflow occurred!" << ANSI_COLOR_RESET << std::endl;
@@ -69,27 +88,22 @@ Fixed::Fixed(const float floatingPointNumber)
 		_value = static_cast<int>(scaled_result);
 	}
 }
-		
-Fixed::~Fixed()
-{
-    std::cerr << ANSI_COLOR_RED << "Fixed Destructor called" << ANSI_COLOR_RESET << std::endl;
+
+Fixed::~Fixed(){
+	std::cerr << ANSI_COLOR_RED << "Fixed Destructor called" << ANSI_COLOR_RESET << std::endl;
 }
 
-
-int Fixed::getRawBits( void ) const
-{
+int Fixed::getRawBits( void ) const{
 	std::cout << "getRawBits member function called" << std::endl;
 	return (this->_value);
 }
 
-void Fixed::setRawBits( int const raw )
-{
+void Fixed::setRawBits( int const raw ){
 	std::cout << "setRawBits member function called" << std::endl;
 	this->_value = raw;
 }
 
-Fixed &Fixed::operator=(const Fixed &src)
-{
+Fixed &Fixed::operator=(const Fixed &src){
 	std::cout << "Fixed Copy Assignment Operator called" << std::endl;
 	if (this != &src)
 	{
@@ -99,18 +113,15 @@ Fixed &Fixed::operator=(const Fixed &src)
 }
 
 // float	Fixed::toFloat(void) 
-float	Fixed::toFloat(void) const
-{
+float	Fixed::toFloat(void) const{
 	return (static_cast<float>(this->_value) / (1 << _fractionalBits));
 }
 
-int		Fixed::toInt(void) const
-{
+int		Fixed::toInt(void) const{
 	return (this->_value >> _fractionalBits);
 }
 
-std::ostream &operator<<(std::ostream &outputStream, const Fixed &fixed)
-{
+std::ostream &operator<<(std::ostream &outputStream, const Fixed &fixed){
 	return(outputStream << fixed.toFloat());
 }
 

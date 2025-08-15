@@ -29,18 +29,30 @@ int main(void) {
 	int choice;
 
 	while (true) {
-		std::cout << "\nSelect a test to run (選択してテストを実行):\n";
-		std::cout << "1. Subject Tests (課題書のテスト)\n";
-		std::cout << "2. Arithmetic Operations Tests (算術演算テスト)\n";
-		std::cout << "3. General Arithmetic Tests (一般的な算術演算テスト)\n";
-		std::cout << "4. Boundary Values Tests (境界値テスト)\n";
-		std::cout << "5. Overflow Cases Tests (オーバーフローケーステスト)\n";
-		std::cout << "6. Increment/Decrement Tests (インクリメント/デクリメントテスト)\n";
-		std::cout << "7. Const min/max Tests (定数のmin/maxテスト)\n";
-		std::cout << "8. Non-const min/max Tests (非定数のmin/maxテスト)\n";
-		std::cout << "9. std::min Comparison Tests (std::min比較テスト)\n";
-		std::cout << "0. Exit (終了)\n";
-		std::cout << "Enter your choice (選択してください): ";
+		std::cout << "\nSelect a test to run\n";
+		std::cout << "(選択してテストを実行)\n";
+		std::cout << "1. Subject Tests\n";
+		std::cout << "   (課題書のテスト)\n";
+		std::cout << "2. Arithmetic Operations Tests\n";
+		std::cout << "   (算術演算テスト)\n";
+		std::cout << "3. General Arithmetic Tests\n";
+		std::cout << "   (一般的な算術演算テスト)\n";
+		std::cout << "4. Boundary Values Tests\n";
+		std::cout << "   (境界値テスト)\n";
+		std::cout << "5. Overflow Cases Tests\n";
+		std::cout << "   (オーバーフローケーステスト)\n";
+		std::cout << "6. Increment/Decrement Tests\n";
+		std::cout << "   (インクリメント/デクリメントテスト)\n";
+		std::cout << "7. Const min/max Tests\n";
+		std::cout << "   (定数のmin/maxテスト)\n";
+		std::cout << "8. Non-const min/max Tests\n";
+		std::cout << "   (非定数のmin/maxテスト)\n";
+		std::cout << "9. std::min Comparison Tests\n";
+		std::cout << "   (std::min比較テスト)\n";
+		std::cout << "0. Exit\n";
+		std::cout << "   (終了)\n";
+		std::cout << "Enter your choice\n";
+		std::cout << "(選択してください): ";
 
 		if (!(std::cin >> choice)) {
 			std::cout << "Invalid input. Please enter a number.\n";

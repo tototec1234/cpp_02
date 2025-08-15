@@ -26,15 +26,15 @@ int main( void )
 	int choice;
 
 	while (true) {
-		std::cout << "\nSelect a test to run (選択してテストを実行):\n";
-		std::cout << "1. Original Subject Tests (元の課題書テスト)\n";
-		std::cout << "2. Const Type Subject Tests (課題書const型テスト)\n";
-		std::cout << "3. Integer Overflow Tests (整数オーバーフローテスト)\n";
-		std::cout << "4. Float Minimum Representable Tests (浮動小数点最小表現可能値テスト)\n";
-		std::cout << "5. Float Overflow Tests (浮動小数点オーバーフローテスト)\n";
-		std::cout << "6. Edge Cases and Other Tests (エッジケースとその他テスト)\n";
-		std::cout << "0. Exit (終了)\n";
-		std::cout << "Enter your choice (選択してください): ";
+		std::cout << "\nSelect a test to run                    (選択してテストを実行):\n";
+		std::cout << "1. Original Subject Tests                 (元の課題書テスト)\n";
+		std::cout << "2. Const Type Subject Tests               (課題書const型テスト)\n";
+		std::cout << "3. Integer Overflow Tests                 (整数オーバーフローテスト)\n";
+		std::cout << "4. Float Minimum Representable Tests      (浮動小数点最小表現可能値テスト)\n";
+		std::cout << "5. Float Overflow Tests                   (浮動小数点オーバーフローテスト)\n";
+		std::cout << "6. Edge Cases and Other Tests             (エッジケースとその他テスト)\n";
+		std::cout << "0. Exit                                   (終了)\n";
+		std::cout << "Enter your choice                         (選択してください): ";
 
 		if (!(std::cin >> choice)) {
 			std::cout << "Invalid input. Please enter a number.\n";

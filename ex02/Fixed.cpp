@@ -19,20 +19,20 @@
 const int Fixed::_fractionalBits = 8;
 
 Fixed::Fixed() : _value(0){
-    // std::cerr << ANSI_COLOR_YELLOW << "Fixed Default Constructor called" << ANSI_COLOR_RESET << std::endl;
+	// std::cerr << ANSI_COLOR_YELLOW << "Fixed Default Constructor called" << ANSI_COLOR_RESET << std::endl;
 }
 
 Fixed::Fixed(const Fixed & src){
-    // std::cerr << ANSI_COLOR_YELLOW << "Fixed Copy Constructor called" << ANSI_COLOR_RESET << std::endl;
-    *this = src;
+	// std::cerr << ANSI_COLOR_YELLOW << "Fixed Copy Constructor called" << ANSI_COLOR_RESET << std::endl;
+	*this = src;
 }
 
 Fixed::Fixed(const int integer): _value(integer << _fractionalBits){
 	// std::cerr << ANSI_COLOR_YELLOW << "Fixed Integer Constructor called" << ANSI_COLOR_RESET << std::endl;
-	
+
 	const int MAX_SAFE_INT = INT_MAX / (1 << _fractionalBits);
 	const int MIN_SAFE_INT = INT_MIN / (1 << _fractionalBits);
-	
+
 	if (integer > MAX_SAFE_INT) {
 		std::cerr << ANSI_COLOR_RED << "Warning: Integer " << integer 
 				  << " exceeds maximum safe value " << MAX_SAFE_INT 
@@ -45,24 +45,23 @@ Fixed::Fixed(const int integer): _value(integer << _fractionalBits){
 	}
 }
 
-
 Fixed::Fixed(const float floatingPointNumber){
 	// std::cerr << ANSI_COLOR_YELLOW << "Fixed Float Constructor called" << ANSI_COLOR_RESET << std::endl;
 	// std::cerr << ANSI_COLOR_YELLOW << "			floatingPointNumber=" << floatingPointNumber << ANSI_COLOR_RESET << std::endl;
-	
+
 	// 最小表現可能値のチェック（丸め処理前）
 	const float MIN_REPRESENTABLE = 1.0f / (1 << _fractionalBits);  // 1/256 = 0.00390625
 	const float BOUNDARY = MIN_REPRESENTABLE / 2.0f;  // 0.00390625 / 2 = 0.00195312
-	
+
 	// 課題制約: std::abs使用不可のため、独自実装で絶対値計算
 	float abs_input = (floatingPointNumber < 0.0f) ? -floatingPointNumber : floatingPointNumber;
-	
+
 	if (floatingPointNumber != 0.0f && abs_input < MIN_REPRESENTABLE) {
-		
+
 		std::cerr << ANSI_COLOR_YELLOW << "Warning: Input value " << floatingPointNumber 
 				  << " (absolute value " << abs_input << ") is smaller than minimum representable value " 
 				  << MIN_REPRESENTABLE << " (1/" << (1 << _fractionalBits) << ")." << std::endl;
-		
+
 		if (abs_input < BOUNDARY) {
 			std::cerr << "         Since |" << floatingPointNumber << "| < " << BOUNDARY 
 					  << " (boundary = " << MIN_REPRESENTABLE << " / 2), value will be rounded to 0." << ANSI_COLOR_RESET << std::endl;
@@ -72,11 +71,9 @@ Fixed::Fixed(const float floatingPointNumber){
 					  << MIN_REPRESENTABLE << " (getRawBits = 1)." << ANSI_COLOR_RESET << std::endl;
 		}
 	}
-	
+
 	long long scaled_result = static_cast<long long>(roundf(floatingPointNumber * (1 << _fractionalBits)));
-	
-	// std::cerr << ANSI_COLOR_BLUE << "			scaled_result (long long)=" << scaled_result << ANSI_COLOR_RESET << std::endl;
-	
+
 	if (scaled_result > INT_MAX) {
 		std::cerr << ANSI_COLOR_RED << "		Warning: Rounded result " << scaled_result 
 				  << " exceeds INT_MAX (" << INT_MAX << "). Overflow occurred!" << ANSI_COLOR_RESET << std::endl;
@@ -90,20 +87,11 @@ Fixed::Fixed(const float floatingPointNumber){
 	else {
 		_value = static_cast<int>(scaled_result);
 	}
-	
-	// if (scaled_result > 0) {
-	// 	std::cerr << ANSI_COLOR_BLUE << "			Difference from INT_MAX  =" << INT_MAX - scaled_result << std::endl;
-	// } else {
-	// 	std::cerr << ANSI_COLOR_BLUE << "			Difference from INT_MIN  =" << scaled_result - INT_MIN << std::endl;
-	// }	
-	// std::cerr << ANSI_COLOR_BLUE << "			final _value=" << _value << ANSI_COLOR_RESET << std::endl;
-
 }
-		
+
 Fixed::~Fixed(){
-    // std::cerr << ANSI_COLOR_RED << "Fixed Destructor called" << ANSI_COLOR_RESET << std::endl;
+	// std::cerr << ANSI_COLOR_RED << "Fixed Destructor called" << ANSI_COLOR_RESET << std::endl;
 }
-
 
 int Fixed::getRawBits( void ) const{
 	// std::cout << ANSI_COLOR_BLUE << "getRawBits member function called" << ANSI_COLOR_RESET << std::endl;
@@ -129,8 +117,6 @@ const Fixed &Fixed::min(const Fixed &a, const Fixed &b){
 const Fixed &Fixed::max(const Fixed &a, const Fixed &b){
 	return (a._value < b._value ? b : a);
 }
-
-
 
 // Overloaded Operators
 	/* Assignment operator */
@@ -179,9 +165,8 @@ bool	Fixed::operator !=(const Fixed &other) const{
 
 /* The 4 arithmetic operators: +, -, *, and /. */
 Fixed	Fixed::operator +(const Fixed &other) const{
-	// オーバーフローチェック付きの加算
 	long long result = static_cast<long long>(this->_value) + static_cast<long long>(other._value);
-	
+
 	if (result > INT_MAX) {
 		std::cerr << ANSI_COLOR_RED << "Warning: Addition result " << result 
 				  << " exceeds INT_MAX (" << INT_MAX << "). Overflow occurred! Result clamped to INT_MAX." << ANSI_COLOR_RESET << std::endl;
@@ -192,16 +177,15 @@ Fixed	Fixed::operator +(const Fixed &other) const{
 				  << " is below INT_MIN (" << INT_MIN << "). Underflow occurred! Result clamped to INT_MIN." << ANSI_COLOR_RESET << std::endl;
 		result = INT_MIN;
 	}
-	
+
 	Fixed resultFixed;
 	resultFixed.setRawBits(static_cast<int>(result));
 	return resultFixed;
 }
 
 Fixed	Fixed::operator -(const Fixed &other) const{
-	// オーバーフローチェック付きの減算
 	long long result = static_cast<long long>(this->_value) - static_cast<long long>(other._value);
-	
+
 	if (result > INT_MAX) {
 		std::cerr << ANSI_COLOR_RED << "Warning: Subtraction result " << result 
 				  << " exceeds INT_MAX (" << INT_MAX << "). Overflow occurred! Result clamped to INT_MAX." << ANSI_COLOR_RESET << std::endl;
@@ -212,20 +196,16 @@ Fixed	Fixed::operator -(const Fixed &other) const{
 				  << " is below INT_MIN (" << INT_MIN << "). Underflow occurred! Result clamped to INT_MIN." << ANSI_COLOR_RESET << std::endl;
 		result = INT_MIN;
 	}
-	
+
 	Fixed resultFixed;
 	resultFixed.setRawBits(static_cast<int>(result));
 	return resultFixed;
 }
 
 Fixed	Fixed::operator *(const Fixed &other) const{
-	// より安全な整数演算を使用してオーバーフローを防ぐ
 	long long result = static_cast<long long>(this->_value) * static_cast<long long>(other._value);
-	
-	// 固定小数点の乗算では、結果を右シフトして正しいスケールに戻す必要がある
 	result >>= _fractionalBits;
-	
-	// オーバーフローチェック
+
 	if (result > INT_MAX) {
 		std::cerr << ANSI_COLOR_RED << "Warning: Multiplication result " << result 
 				  << " exceeds INT_MAX (" << INT_MAX << "). Overflow occurred! Result clamped to INT_MAX." << ANSI_COLOR_RESET << std::endl;
@@ -236,53 +216,43 @@ Fixed	Fixed::operator *(const Fixed &other) const{
 				  << " is below INT_MIN (" << INT_MIN << "). Underflow occurred! Result clamped to INT_MIN." << ANSI_COLOR_RESET << std::endl;
 		result = INT_MIN;
 	}
-	
+
 	Fixed resultFixed;
 	resultFixed.setRawBits(static_cast<int>(result));
 	return resultFixed;
 }
 
 Fixed	Fixed::operator /(const Fixed &other) const{
-	// ゼロ除算チェック
 	if (other._value == 0) {
 		std::cerr << ANSI_COLOR_RED << "Error: Division by zero!" << ANSI_COLOR_RESET << std::endl;
-		// 課題要件に従いクラッシュさせる（自然なゼロ除算）
 		int dummy = 1 / other.getRawBits();  // これによりプログラムがクラッシュ
 		// std::abort();  // コメントアウト：レビュー時実験用（外部関数依存回避のため）
 		return Fixed(dummy);  // 到達しないが、コンパイラ警告回避のため
 	}
-	
-	// 特別ケース：1で割る場合（完全な精度保持）
+
 	if (other._value == (1 << _fractionalBits)) {
 		Fixed result;
 		result.setRawBits(this->_value);
 		return result;
 	}
-	
-	// 固定小数点直接演算による高精度除算
-	// 被除数を左シフトして精度を確保（64bit演算で中間結果の精度を保持）
+
 	long long extended_dividend = static_cast<long long>(this->_value) << _fractionalBits;
 	long long raw_quotient = extended_dividend / static_cast<long long>(other._value);
-	
-	// 四捨五入処理（固定小数点演算での正確な丸め）
+
 	long long remainder = extended_dividend % static_cast<long long>(other._value);
 	if (remainder != 0) {
-		// 符号を考慮した四捨五入判定
 		bool dividend_positive = (extended_dividend >= 0);
 		bool divisor_positive = (other._value >= 0);
 		bool same_sign = (dividend_positive == divisor_positive);
-		
-		// 絶対値による半値判定
+
 		long long abs_remainder = (remainder < 0) ? -remainder : remainder;
 		long long abs_divisor = (other._value < 0) ? -static_cast<long long>(other._value) : static_cast<long long>(other._value);
-		
-		// 四捨五入：余りの絶対値が除数の絶対値の半分以上の場合
+
 		if (abs_remainder * 2 >= abs_divisor) {
 			raw_quotient += same_sign ? 1 : -1;
 		}
 	}
-	
-	// 固定小数点範囲内でのオーバーフローチェック
+
 	if (raw_quotient > static_cast<long long>(INT_MAX)) {
 		std::cerr << ANSI_COLOR_RED << "Warning: Division result " << raw_quotient 
 				  << " exceeds maximum representable value (" << INT_MAX 
@@ -295,14 +265,13 @@ Fixed	Fixed::operator /(const Fixed &other) const{
 				  << "). Result clamped to minimum." << ANSI_COLOR_RESET << std::endl;
 		raw_quotient = static_cast<long long>(INT_MIN);
 	}
-	
-	// 結果のFixed型オブジェクト作成
+
 	Fixed result;
 	result.setRawBits(static_cast<int>(raw_quotient));
 	return result;
 }
 
-		/* The 4 increment/decrement (pre-increment and post-increment, pre-decrement and
+/* The 4 increment/decrement (pre-increment and post-increment, pre-decrement and
 post-decrement) operators, which will increase or decrease the fixed-point value by
 the smallest representable ϵ, such that 1 + ϵ > 1. */
 
@@ -324,26 +293,13 @@ Fixed	&Fixed::operator --(void){
 	this->_value--;
 	return (*this);
 }
-/*
-mpについて、以下の懸念を持っています：
-tempは演算前の値のコピーを保持している
-tempを返すことで<<演算子（toFloat()）に値を渡している
-しかし、operator--(int)のスコープを抜けた時にtempのデストラクタが呼ばれて破棄される
-そうするとtoFloat()に参照が渡せないのではないか？
-これは一時オブジェクトの生存期間に関する重要な質問です。
-実際のところ、C++では値で返されるオブジェクトは、その値が使用されるまでの間（通常は式の評価が完了するまで）生存期間が延長されます。つまり：
-tempは値として返される（参照ではない）
-戻り値として返される時に、tempのコピーが作成されるか、あるいはReturn Value Optimization (RVO)により最適化される
-そのコピー（または最適化されたオブジェクト）は、式の評価が完了するまで生存する
-<<演算子が呼ばれる時には、そのオブジェクトはまだ有効
 
-*/
-	// std::cout << a-- ;
-   // この順序で実行されます：
-   // 1. a--が評価され、tempが作成・返される
-   // 2. <<演算子がtempを受け取る  
-   // 3. toFloat()がtempに対して呼ばれる
-   // 4. 文全体の評価完了後にtempが破棄される
+// std::cout << a-- ;
+// この順序で実行されます：
+// 1. a--が評価され、tempが作成・返される
+// 2. <<演算子がtempを受け取る  
+// 3. toFloat()がtempに対して呼ばれる
+// 4. 文全体の評価完了後にtempが破棄される
 Fixed	Fixed::operator --(int){
 	// std::cout << ANSI_COLOR_YELLOW << "Fixed Post-Decrement Operator called" << ANSI_COLOR_RESET << std::endl;
 	Fixed temp(*this);
@@ -354,19 +310,3 @@ Fixed	Fixed::operator --(int){
 std::ostream &operator <<(std::ostream &outputStream, const Fixed &fixed){
 	return(outputStream << fixed.toFloat());
 }
-
-
-/*
-Fixed	&Fixed::operator --(void){
-	std::cout << ANSI_COLOR_YELLOW << "Fixed Pre-Decrement Operator called" << ANSI_COLOR_RESET << std::endl;
-	this->_value--;
-	return (*this);
-}
-
-が関数シグネチャ前方の＆でオブジェクトのアドレス（ポインタ）を返す型を宣言しているので指定子のオブジェクトの
-_valueを書き換えた後にそのアドレスを返すことで　<< にオーバーロードされているtoFloteにアドレスを渡すので演算後の値が表示される
-
-というのは理解できました。
-
-一方で
-*/

@@ -6,7 +6,7 @@
 /*   By: toruinoue <toruinoue@student.42.fr>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/11 19:48:06 by torinoue          #+#    #+#             */
-/*   Updated: 2025/08/15 11:43:07 by toruinoue        ###   ########.fr       */
+/*   Updated: 2025/08/15 12:46:14 by toruinoue        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,60 +26,60 @@ void test_non_const_min_max();
 void test_std_min_comparison();
 
 int main(void) {
-    int choice;
-    
-    while (true) {
-        std::cout << "\nSelect a test to run (選択してテストを実行):\n";
-        std::cout << "1. Subject Tests (課題書のテスト)\n";
-        std::cout << "2. Arithmetic Operations Tests (算術演算テスト)\n";
-        std::cout << "3. Boundary Values Tests (境界値テスト)\n";
-        std::cout << "4. Overflow Cases Tests (オーバーフローケーステスト)\n";
-        std::cout << "5. Increment/Decrement Tests (インクリメント/デクリメントテスト)\n";
-        std::cout << "6. Const min/max Tests (定数のmin/maxテスト)\n";
-        std::cout << "7. Non-const min/max Tests (非定数のmin/maxテスト)\n";
-        std::cout << "8. std::min Comparison Tests (std::min比較テスト)\n";
-        std::cout << "0. Exit (終了)\n";
-        std::cout << "Enter your choice (選択してください): ";
-        
-        if (!(std::cin >> choice)) {
-            std::cout << "Invalid input. Please enter a number.\n";
-            std::cin.clear();
-            std::cin.ignore(10000, '\n');
-            continue;
-        }
-        
-        switch (choice) {
-            case 0:
-                return 0;
-            case 1:
-                test_subject();
-                break;
-            case 2:
-                test_arithmetic_operations();
-                break;
-            case 3:
-                test_boundary_values();
-                break;
-            case 4:
-                test_overflow_cases();
-                break;
-            case 5:
-                test_increment_decrement();
-                break;
-            case 6:
-                test_const_min_max();
-                break;
-            case 7:
-                test_non_const_min_max();
-                break;
-            case 8:
-                test_std_min_comparison();
-                break;
-            default:
-                std::cout << "Invalid choice. Please try again.\n";
-        }
-    }
-    return 0;
+	int choice;
+	
+	while (true) {
+		std::cout << "\nSelect a test to run (選択してテストを実行):\n";
+		std::cout << "1. Subject Tests (課題書のテスト)\n";
+		std::cout << "2. Arithmetic Operations Tests (算術演算テスト)\n";
+		std::cout << "3. Boundary Values Tests (境界値テスト)\n";
+		std::cout << "4. Overflow Cases Tests (オーバーフローケーステスト)\n";
+		std::cout << "5. Increment/Decrement Tests (インクリメント/デクリメントテスト)\n";
+		std::cout << "6. Const min/max Tests (定数のmin/maxテスト)\n";
+		std::cout << "7. Non-const min/max Tests (非定数のmin/maxテスト)\n";
+		std::cout << "8. std::min Comparison Tests (std::min比較テスト)\n";
+		std::cout << "0. Exit (終了)\n";
+		std::cout << "Enter your choice (選択してください): ";
+		
+		if (!(std::cin >> choice)) {
+			std::cout << "Invalid input. Please enter a number.\n";
+			std::cin.clear();
+			std::cin.ignore(10000, '\n');
+			continue;
+		}
+		
+		switch (choice) {
+			case 0:
+				return 0;
+			case 1:
+				test_subject();
+				break;
+			case 2:
+				test_arithmetic_operations();
+				break;
+			case 3:
+				test_boundary_values();
+				break;
+			case 4:
+				test_overflow_cases();
+				break;
+			case 5:
+				test_increment_decrement();
+				break;
+			case 6:
+				test_const_min_max();
+				break;
+			case 7:
+				test_non_const_min_max();
+				break;
+			case 8:
+				test_std_min_comparison();
+				break;
+			default:
+				std::cout << "Invalid choice. Please try again.\n";
+		}
+	}
+	return 0;
 }
 
 void test_subject() {
@@ -304,4 +304,8 @@ void test_std_min_comparison() {
 0.00390625 を二進数で表すと 0.00000001 
 0.00000001
 0.12345678
+ */
+
+ /*
+ sed -i '' 's/^[[:space:]]*$//' *.cpp
  */

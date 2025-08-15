@@ -18,13 +18,13 @@
 class Fixed
 {
 	public:
-	/* Contstructors & Destructors */
+		/* Contstructors & Destructors */
 		Fixed(void);
 		Fixed(const int integer);
 		Fixed(const float floatingPointNumber);
 		Fixed(const Fixed & src);
 		~Fixed(void);
-		
+
 	// Public Methods
 		/* Getters and setters */
 		int		getRawBits( void ) const;
@@ -60,8 +60,8 @@ class Fixed
 		Fixed	operator *(const Fixed &other) const;
 		Fixed	operator /(const Fixed &other) const;
 		/* The 4 increment/decrement (pre-increment and post-increment, pre-decrement and
-post-decrement) operators, which will increase or decrease the fixed-point value by
-the smallest representable ϵ, such that 1 + ϵ > 1. */
+		post-decrement) operators, which will increase or decrease the fixed-point value by
+		the smallest representable ϵ, such that 1 + ϵ > 1. */
 		Fixed	&operator ++(void);
 		Fixed	&operator --(void);
 		Fixed	operator ++(int);
@@ -73,12 +73,10 @@ the smallest representable ϵ, such that 1 + ϵ > 1. */
 		static const int _fractionalBits;
 };
 
-
 std::ostream &operator <<(std::ostream &outputStream, const Fixed &fixed);
 #endif
 
 /*
 --a;  // コンパイラ → operator--(void) を呼び出す
 a--;  // コンパイラ → operator--(int) を呼び出す
-
 */

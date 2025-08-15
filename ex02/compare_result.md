@@ -1,0 +1,93 @@
+python3 compare_fixed_results.py result.txt log 
+================================================================================
+Fixed Point Precision Comparison Analysis
+================================================================================
+Benchmark: result.txt (42Tokyo Standard)
+Current:   log (Your Implementation)
+================================================================================
+
+Found 11 significant differences:
+
+📊 DIVISION OPERATIONS ANALYSIS
+--------------------------------------------------
+Line  9: 2 / 3
+  Mathematical Truth: 0.666667
+  Benchmark (42Tokyo): 0.664062 (error: 0.002605)
+  Current (Your code): 0.667969 (error: 0.001302)
+  More Accurate: CURRENT
+
+Line 12: 3 / 0.1
+  Mathematical Truth: 30.000000
+  Benchmark (42Tokyo): 29.535156 (error: 0.464844)
+  Current (Your code): 29.539062 (error: 0.460938)
+  More Accurate: CURRENT
+
+Line 15: 1.1 / -0.3
+  Mathematical Truth: -3.666667
+  Benchmark (42Tokyo): -3.660156 (error: 0.006511)
+  Current (Your code): -3.664062 (error: 0.002605)
+  More Accurate: CURRENT
+
+Line 32: 10.004 / 2
+  Mathematical Truth: 5.002000
+  Benchmark (42Tokyo): 5.000000 (error: 0.002000)
+  Current (Your code): 5.003906 (error: 0.001906)
+  More Accurate: CURRENT
+
+Line 37: 10.004 / -2
+  Mathematical Truth: -5.002000
+  Benchmark (42Tokyo): -5.000000 (error: 0.002000)
+  Current (Your code): -5.003906 (error: 0.001906)
+  More Accurate: CURRENT
+
+Line 42: -10.004 / 2
+  Mathematical Truth: -5.002000
+  Benchmark (42Tokyo): -5.000000 (error: 0.002000)
+  Current (Your code): -5.003906 (error: 0.001906)
+  More Accurate: CURRENT
+
+Division Summary: Benchmark better: 0, Current better: 6
+
+🔢 MULTIPLICATION OPERATIONS ANALYSIS
+--------------------------------------------------
+Line 21: 1.1 * -0.3
+  Mathematical Truth: -0.330000
+  Benchmark (42Tokyo): -0.328125 (error: 0.001875)
+  Current (Your code): -0.332031 (error: 0.002031)
+  More Accurate: BENCHMARK
+
+Line 38: 10.004 * -0.8
+  Mathematical Truth: -8.003200
+  Benchmark (42Tokyo): -8.007812 (error: 0.004612)
+  Current (Your code): -8.011719 (error: 0.008519)
+  More Accurate: BENCHMARK
+
+Line 43: -10.004 * 0.8
+  Mathematical Truth: -8.003200
+  Benchmark (42Tokyo): -8.007812 (error: 0.004612)
+  Current (Your code): -8.011719 (error: 0.008519)
+  More Accurate: BENCHMARK
+
+Line 44: 1.1 * -0.3
+  Mathematical Truth: -0.330000
+  Benchmark (42Tokyo): -0.328125 (error: 0.001875)
+  Current (Your code): -0.332031 (error: 0.002031)
+  More Accurate: BENCHMARK
+
+Line 46: 1.1 * -0.3
+  Mathematical Truth: -0.330000
+  Benchmark (42Tokyo): -0.328125 (error: 0.001875)
+  Current (Your code): -0.332031 (error: 0.002031)
+  More Accurate: BENCHMARK
+
+Multiplication Summary: Benchmark better: 5, Current better: 0
+
+================================================================================
+🏆 OVERALL ACCURACY COMPARISON
+================================================================================
+Total differences analyzed: 11
+Benchmark (42Tokyo) more accurate: 5 cases
+Current (Your code) more accurate: 6 cases
+
+🎯 EXCELLENT: Your implementation is more accurate than the benchmark!
+================================================================================

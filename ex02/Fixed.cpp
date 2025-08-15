@@ -13,8 +13,8 @@
 #include "AnsiColor.hpp"
 #include "Fixed.hpp"
 #include <climits>
-#include <cmath>
-#include <cstdlib>
+#include <cmath>    // 課題許可関数: roundf のみ使用
+// #include <cstdlib>  // std::abort for division by zero crash (課題要件) - コメントアウト：レビュー時実験用
 
 const int Fixed::_fractionalBits = 8;
 
@@ -54,8 +54,10 @@ Fixed::Fixed(const float floatingPointNumber){
 	const float MIN_REPRESENTABLE = 1.0f / (1 << _fractionalBits);  // 1/256 = 0.00390625
 	const float BOUNDARY = MIN_REPRESENTABLE / 2.0f;  // 0.00390625 / 2 = 0.00195312
 	
-	if (floatingPointNumber != 0.0f && std::abs(floatingPointNumber) < MIN_REPRESENTABLE) {
-		float abs_input = std::abs(floatingPointNumber);
+	// 課題制約: std::abs使用不可のため、独自実装で絶対値計算
+	float abs_input = (floatingPointNumber < 0.0f) ? -floatingPointNumber : floatingPointNumber;
+	
+	if (floatingPointNumber != 0.0f && abs_input < MIN_REPRESENTABLE) {
 		
 		std::cerr << ANSI_COLOR_YELLOW << "Warning: Input value " << floatingPointNumber 
 				  << " (absolute value " << abs_input << ") is smaller than minimum representable value " 
@@ -244,10 +246,10 @@ Fixed	Fixed::operator /(const Fixed &other) const{
 	// ゼロ除算チェック
 	if (other._value == 0) {
 		std::cerr << ANSI_COLOR_RED << "Error: Division by zero!" << ANSI_COLOR_RESET << std::endl;
-		// 課題要件に従いクラッシュさせる
-		int dummy = 1 / other.getRawBits();
-		std::abort();
-		return Fixed(dummy);
+		// 課題要件に従いクラッシュさせる（自然なゼロ除算）
+		int dummy = 1 / other.getRawBits();  // これによりプログラムがクラッシュ
+		// std::abort();  // コメントアウト：レビュー時実験用（外部関数依存回避のため）
+		return Fixed(dummy);  // 到達しないが、コンパイラ警告回避のため
 	}
 	
 	// 特別ケース：1で割る場合（完全な精度保持）
@@ -334,8 +336,6 @@ tempは値として返される（参照ではない）
 戻り値として返される時に、tempのコピーが作成されるか、あるいはReturn Value Optimization (RVO)により最適化される
 そのコピー（または最適化されたオブジェクト）は、式の評価が完了するまで生存する
 <<演算子が呼ばれる時には、そのオブジェクトはまだ有効
-
-
 
 */
 	// std::cout << a-- ;

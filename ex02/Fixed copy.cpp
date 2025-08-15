@@ -15,6 +15,7 @@
 #include <climits>
 #include <cmath>
 
+
 const int Fixed::_fractionalBits = 8;
 
 Fixed::Fixed() : _value(0){

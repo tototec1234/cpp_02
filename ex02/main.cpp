@@ -17,6 +17,7 @@
 
 void test_subject();
 void test_arithmetic_operations();
+void test_general_arithmetic_operations();
 void test_boundary_values();
 void test_overflow_cases();
 void test_increment_decrement();
@@ -31,12 +32,13 @@ int main(void) {
 		std::cout << "\nSelect a test to run (選択してテストを実行):\n";
 		std::cout << "1. Subject Tests (課題書のテスト)\n";
 		std::cout << "2. Arithmetic Operations Tests (算術演算テスト)\n";
-		std::cout << "3. Boundary Values Tests (境界値テスト)\n";
-		std::cout << "4. Overflow Cases Tests (オーバーフローケーステスト)\n";
-		std::cout << "5. Increment/Decrement Tests (インクリメント/デクリメントテスト)\n";
-		std::cout << "6. Const min/max Tests (定数のmin/maxテスト)\n";
-		std::cout << "7. Non-const min/max Tests (非定数のmin/maxテスト)\n";
-		std::cout << "8. std::min Comparison Tests (std::min比較テスト)\n";
+		std::cout << "3. General Arithmetic Tests (一般的な算術演算テスト)\n";
+		std::cout << "4. Boundary Values Tests (境界値テスト)\n";
+		std::cout << "5. Overflow Cases Tests (オーバーフローケーステスト)\n";
+		std::cout << "6. Increment/Decrement Tests (インクリメント/デクリメントテスト)\n";
+		std::cout << "7. Const min/max Tests (定数のmin/maxテスト)\n";
+		std::cout << "8. Non-const min/max Tests (非定数のmin/maxテスト)\n";
+		std::cout << "9. std::min Comparison Tests (std::min比較テスト)\n";
 		std::cout << "0. Exit (終了)\n";
 		std::cout << "Enter your choice (選択してください): ";
 
@@ -57,21 +59,24 @@ int main(void) {
 				test_arithmetic_operations();
 				break;
 			case 3:
-				test_boundary_values();
+				test_general_arithmetic_operations();
 				break;
 			case 4:
-				test_overflow_cases();
+				test_boundary_values();
 				break;
 			case 5:
-				test_increment_decrement();
+				test_overflow_cases();
 				break;
 			case 6:
-				test_const_min_max();
+				test_increment_decrement();
 				break;
 			case 7:
-				test_non_const_min_max();
+				test_const_min_max();
 				break;
 			case 8:
+				test_non_const_min_max();
+				break;
+			case 9:
 				test_std_min_comparison();
 				break;
 			default:
@@ -136,6 +141,48 @@ void test_arithmetic_operations() {
 	std::cout << "a / 1.0f = " << (a / 1.0f) << std::endl;
 	std::cout << "a / 0.03125 = " << (a / (1/32.0f)) << std::endl;
 	std::cout << "a / 0.00390625 = " << (a / (1/256.0f)) << std::endl;
+}
+
+void test_general_arithmetic_operations() {
+	std::cout << "\n一般的な数値での算術演算子のテスト:" << std::endl;
+	
+	Fixed x(10.5f);
+	Fixed y(3.25f);
+	Fixed z(-2.75f);
+	Fixed w(100);
+	
+	std::cout << "x = " << x << std::endl;
+	std::cout << "y = " << y << std::endl;
+	std::cout << "z = " << z << std::endl;
+	std::cout << "w = " << w << std::endl;
+
+	std::cout << "\n加算テスト:" << std::endl;
+	std::cout << "x + y = " << (x + y) << std::endl;
+	std::cout << "x + z = " << (x + z) << std::endl;
+	std::cout << "y + w = " << (y + w) << std::endl;
+
+	std::cout << "\n減算テスト:" << std::endl;
+	std::cout << "x - y = " << (x - y) << std::endl;
+	std::cout << "w - x = " << (w - x) << std::endl;
+	std::cout << "y - z = " << (y - z) << std::endl;
+
+	std::cout << "\n乗算テスト:" << std::endl;
+	std::cout << "x * y = " << (x * y) << std::endl;
+	std::cout << "z * z = " << (z * z) << std::endl;
+	std::cout << "y * 2 = " << (y * 2) << std::endl;
+
+	std::cout << "\n除算テスト:" << std::endl;
+	std::cout << "w / x = " << (w / x) << std::endl;
+	std::cout << "x / y = " << (x / y) << std::endl;
+	std::cout << "z / -1 = " << (z / -1) << std::endl;
+
+	std::cout << "\n比較演算子テスト:" << std::endl;
+	std::cout << "x > y: " << (x > y) << std::endl;
+	std::cout << "z < y: " << (z < y) << std::endl;
+	std::cout << "w >= x: " << (w >= x) << std::endl;
+	std::cout << "y <= x: " << (y <= x) << std::endl;
+	std::cout << "x == Fixed(10.5f): " << (x == Fixed(10.5f)) << std::endl;
+	std::cout << "z != y: " << (z != y) << std::endl;
 }
 
 void test_boundary_values() {
@@ -217,15 +264,15 @@ void test_overflow_cases() {
 	Fixed large1(32767.0f);
 	Fixed large2(32766.0f);
 
-	std::cout << "large1 = " << large1 << std::endl;
+	std::cout << "large1 =  2^15 - 1 = " << large1 << std::endl;
 	std::cout << "  getRawBits: " << large1.getRawBits() << std::endl;
-	std::cout << "large2 = " << large2 << std::endl;
+	std::cout << "large2 =  2^15 - 2 = " << large2 << std::endl;
 	std::cout << "  getRawBits: " << large2.getRawBits() << std::endl;
-	std::cout << "large1 + large2 = " << (large1 + large2) << std::endl;
+	std::cout << "large1 + large2 = 2^15 - 1 + 2^15 - 2 = " << (large1 + large2) << std::endl;
 	std::cout << "  getRawBits: " << (large1 + large2).getRawBits() << std::endl;
-	std::cout << "large1 * large1 = " << (large1 * large1) << std::endl;
+	std::cout << "large1 * large1 = (2^15 - 1) * (2^15 - 1) = " << (large1 * large1) << std::endl;
 	std::cout << "  getRawBits: " << (large1 * large1).getRawBits() << std::endl;
-	std::cout << "large1 * large2 = " << (large1 * large2) << std::endl;
+	std::cout << "large1 * large2 = (2^15 - 1) * (2^15 - 2) = " << (large1 * large2) << std::endl;
 	std::cout << "  getRawBits: " << (large1 * large2).getRawBits() << std::endl;
 
 	std::cout << "\n負の値のテスト:" << std::endl;

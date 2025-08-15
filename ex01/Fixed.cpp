@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Fixed.cpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: toruinoue <toruinoue@student.42.fr>        +#+  +:+       +#+        */
+/*   By: torinoue <torinoue@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/11 19:48:18 by torinoue          #+#    #+#             */
-/*   Updated: 2025/08/14 15:30:31 by toruinoue        ###   ########.fr       */
+/*   Updated: 2025/08/15 14:59:27 by torinoue         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 #include "Fixed.hpp"
 #include <iomanip>
 #include <climits>
-#include <cmath>    // 課題許可関数: roundf のみ使用
+#include <cmath> 
 
 const int Fixed::_fractionalBits = 8;
 

@@ -3,30 +3,20 @@ clean:
 	$(MAKE) clean -C ex00
 	$(MAKE) clean -C ex01
 	$(MAKE) clean -C ex02
-	$(MAKE) clean -C ex03
-	$(MAKE) clean -C ex04
-	$(MAKE) clean -C ex05
-	$(MAKE) clean -C ex06
+
 
 fclean:
 	clear
 	$(MAKE) -C ex00 fclean
 	$(MAKE) -C ex01 fclean
 	$(MAKE) -C ex02 fclean
-	$(MAKE) -C ex03 fclean
-	$(MAKE) -C ex04 fclean
-	$(MAKE) -C ex05 fclean
-	$(MAKE) -C ex06 fclean
+
 
 re:
 	clear
 	$(MAKE) -C ex00 re
 	$(MAKE) -C ex01 re
 	$(MAKE) -C ex02 re
-	$(MAKE) -C ex03 re
-	$(MAKE) -C ex04 re
-	$(MAKE) -C ex05 re
-	$(MAKE) -C ex06 re
 
 run:
 	clear
@@ -51,10 +41,7 @@ all:
 	$(MAKE) -C ex00 all
 	$(MAKE) -C ex01 all
 	$(MAKE) -C ex02 all
-	$(MAKE) -C ex03 all
-	$(MAKE) -C ex04 all
-	$(MAKE) -C ex05 all
-	$(MAKE) -C ex06 all
+
 
 
 

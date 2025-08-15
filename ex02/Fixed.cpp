@@ -3,18 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   Fixed.cpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: toruinoue <toruinoue@student.42.fr>        +#+  +:+       +#+        */
+/*   By: torinoue <torinoue@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/11 19:48:18 by torinoue          #+#    #+#             */
-/*   Updated: 2025/08/14 22:14:25 by toruinoue        ###   ########.fr       */
+/*   Updated: 2025/08/15 14:58:17 by torinoue         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "AnsiColor.hpp"
 #include "Fixed.hpp"
 #include <climits>
-#include <cmath>    // 課題許可関数: roundf のみ使用
-// #include <cstdlib>  // std::abort for division by zero crash (課題要件) - コメントアウト：レビュー時実験用
+#include <cmath>
 
 const int Fixed::_fractionalBits = 8;
 
@@ -49,11 +48,9 @@ Fixed::Fixed(const float floatingPointNumber){
 	// std::cerr << ANSI_COLOR_YELLOW << "Fixed Float Constructor called" << ANSI_COLOR_RESET << std::endl;
 	// std::cerr << ANSI_COLOR_YELLOW << "			floatingPointNumber=" << floatingPointNumber << ANSI_COLOR_RESET << std::endl;
 
-	// 最小表現可能値のチェック（丸め処理前）
 	const float MIN_REPRESENTABLE = 1.0f / (1 << _fractionalBits);  // 1/256 = 0.00390625
 	const float BOUNDARY = MIN_REPRESENTABLE / 2.0f;  // 0.00390625 / 2 = 0.00195312
 
-	// 課題制約: std::abs使用不可のため、独自実装で絶対値計算
 	float abs_input = (floatingPointNumber < 0.0f) ? -floatingPointNumber : floatingPointNumber;
 
 	if (floatingPointNumber != 0.0f && abs_input < MIN_REPRESENTABLE) {
@@ -225,9 +222,8 @@ Fixed	Fixed::operator *(const Fixed &other) const{
 Fixed	Fixed::operator /(const Fixed &other) const{
 	if (other._value == 0) {
 		std::cerr << ANSI_COLOR_RED << "Error: Division by zero!" << ANSI_COLOR_RESET << std::endl;
-		int dummy = 1 / other.getRawBits();  // これによりプログラムがクラッシュ
-		// std::abort();  // コメントアウト：レビュー時実験用（外部関数依存回避のため）
-		return Fixed(dummy);  // 到達しないが、コンパイラ警告回避のため
+		int dummy = 1 / other.getRawBits();
+		return Fixed(dummy);
 	}
 
 	if (other._value == (1 << _fractionalBits)) {
@@ -294,12 +290,6 @@ Fixed	&Fixed::operator --(void){
 	return (*this);
 }
 
-// std::cout << a-- ;
-// この順序で実行されます：
-// 1. a--が評価され、tempが作成・返される
-// 2. <<演算子がtempを受け取る  
-// 3. toFloat()がtempに対して呼ばれる
-// 4. 文全体の評価完了後にtempが破棄される
 Fixed	Fixed::operator --(int){
 	// std::cout << ANSI_COLOR_YELLOW << "Fixed Post-Decrement Operator called" << ANSI_COLOR_RESET << std::endl;
 	Fixed temp(*this);

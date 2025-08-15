@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: toruinoue <toruinoue@student.42.fr>        +#+  +:+       +#+        */
+/*   By: torinoue <torinoue@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/11 19:48:06 by torinoue          #+#    #+#             */
-/*   Updated: 2025/08/13 19:00:34 by toruinoue        ###   ########.fr       */
+/*   Updated: 2025/08/15 15:19:30 by torinoue         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,19 +119,16 @@ void test_subject_const() {
 void test_integer_overflow() {
 	std::cout << ANSI_COLOR_CYAN << "\n=== 整数オーバーフロー/アンダーフローテスト ===" << ANSI_COLOR_RESET << std::endl;
 	{
-		// 正常範囲の値
 		std::cout << ANSI_COLOR_GREEN << "正常範囲の値: 8388607 (INT_MAX/256), -8388608 (INT_MIN/256)" << ANSI_COLOR_RESET << std::endl;
 		Fixed safe_max(8388607);  // INT_MAX / 256 = 8388607
 		Fixed safe_min(-8388608); // INT_MIN / 256 = -8388608
 		std::cout << "safe_max: " << safe_max << std::endl;
 		std::cout << "safe_min: " << safe_min << std::endl;
 
-		// オーバーフロー値
 		std::cout << ANSI_COLOR_MAGENTA << "オーバーフロー値: 8388608 (INT_MAX/256 + 1)" << ANSI_COLOR_RESET << std::endl;
 		Fixed overflow_test(8388608);  // INT_MAX / 256 + 1
 		std::cout << "overflow_test: " << overflow_test << std::endl;
 
-		// アンダーフロー値
 		std::cout << ANSI_COLOR_MAGENTA << "アンダーフロー値: -8388609 (INT_MIN/256 - 1)" << ANSI_COLOR_RESET << std::endl;
 		Fixed underflow_test(-8388609); // INT_MIN / 256 - 1
 		std::cout << "underflow_test: " << underflow_test << std::endl;
@@ -141,22 +138,18 @@ void test_integer_overflow() {
 void test_float_minimum_representable() {
 	std::cout << ANSI_COLOR_CYAN << "\n=== 浮動小数点最小表現可能値テスト ===" << ANSI_COLOR_RESET << std::endl;
 	{
-		// 最小表現可能値 = 1/256 = 0.00390625
 		std::cout << ANSI_COLOR_GREEN << "最小表現可能値付近: 0.00390625 (1/256)" << ANSI_COLOR_RESET << std::endl;
-		Fixed min_representable(0.00390625f);  // 1/256
+		Fixed min_representable(0.00390625f);
 		std::cout << "min_representable (0.00390625f): " << min_representable << std::endl;
 
-		// 境界値 = 1/512 = 0.00195312
 		std::cout << ANSI_COLOR_BLUE << "境界値テスト: 0.00195312 (1/512)" << ANSI_COLOR_RESET << std::endl;
-		Fixed boundary_test(0.00195312f);  // 1/512 (boundary)
+		Fixed boundary_test(0.00195312f);
 		std::cout << "boundary_test (0.00195312f): " << boundary_test << std::endl;
 
-		// 境界値より小さい値（0に丸められる）
 		std::cout << ANSI_COLOR_BLUE << "境界値より小さい値（0に丸められる）: 0.001" << ANSI_COLOR_RESET << std::endl;
-		Fixed very_small(0.001f);  // < boundary
+		Fixed very_small(0.001f);
 		std::cout << "very_small (0.001f): " << very_small << std::endl;
 
-		// 負の小さい値
 		std::cout << ANSI_COLOR_BLUE << "負の小さい値: -0.001, -0.00195312" << ANSI_COLOR_RESET << std::endl;
 		Fixed negative_small(-0.001f);
 		std::cout << "negative_small (-0.001f): " << negative_small << std::endl;
@@ -169,12 +162,10 @@ void test_float_minimum_representable() {
 void test_float_overflow() {
 	std::cout << ANSI_COLOR_CYAN << "\n=== 浮動小数点オーバーフロー/アンダーフローテスト ===" << ANSI_COLOR_RESET << std::endl;
 	{
-		// 大きな値のテスト
 		std::cout << ANSI_COLOR_MAGENTA << "大きな値: 99999999.9" << ANSI_COLOR_RESET << std::endl;
 		Fixed large_float(99999999.9f);
 		std::cout << "large_float (99999999.9f): " << large_float << std::endl;
 
-		// 小さな値のテスト
 		std::cout << ANSI_COLOR_MAGENTA << "小さな値: -99999999.9" << ANSI_COLOR_RESET << std::endl;
 		Fixed small_float(-99999999.9f);
 		std::cout << "small_float (-99999999.9f): " << small_float << std::endl;
@@ -184,28 +175,24 @@ void test_float_overflow() {
 void test_edge_cases() {
 	std::cout << ANSI_COLOR_CYAN << "\n=== エッジケースとその他のテスト ===" << ANSI_COLOR_RESET << std::endl;
 	{
-		// 0の値
 		std::cout << ANSI_COLOR_GREEN << "ゼロ値テスト: 0 (int), 0.0 (float)" << ANSI_COLOR_RESET << std::endl;
 		Fixed zero_int(0);
 		Fixed zero_float(0.0f);
 		std::cout << "zero_int: " << zero_int << std::endl;
 		std::cout << "zero_float: " << zero_float << std::endl;
 
-		// 1の値
 		std::cout << ANSI_COLOR_GREEN << "1の値テスト: 1 (int), 1.0 (float)" << ANSI_COLOR_RESET << std::endl;
 		Fixed one_int(1);
 		Fixed one_float(1.0f);
 		std::cout << "one_int: " << one_int << std::endl;
 		std::cout << "one_float: " << one_float << std::endl;
 
-		// 負の値
 		std::cout << ANSI_COLOR_GREEN << "負の値テスト: -42 (int), -3.14 (float)" << ANSI_COLOR_RESET << std::endl;
 		Fixed negative_int(-42);
 		Fixed negative_float(-3.14f);
 		std::cout << "negative_int (-42): " << negative_int << std::endl;
 		std::cout << "negative_float (-3.14f): " << negative_float << std::endl;
 
-		// 小数の精度テスト
 		std::cout << ANSI_COLOR_GREEN << "小数精度テスト: 0.5, 0.25, 0.125" << ANSI_COLOR_RESET << std::endl;
 		Fixed precision_test1(0.5f);
 		Fixed precision_test2(0.25f);
@@ -214,11 +201,10 @@ void test_edge_cases() {
 		std::cout << "precision_test2 (0.25f): " << precision_test2 << std::endl;
 		std::cout << "precision_test3 (0.125f): " << precision_test3 << std::endl;
 
-		// getRawBits/setRawBitsテスト
 		std::cout << ANSI_COLOR_GREEN << "getRawBits/setRawBitsテスト: 初期値0, setRawBits(256)" << ANSI_COLOR_RESET << std::endl;
 		Fixed raw_test;
 		std::cout << "raw_test initial getRawBits: " << raw_test.getRawBits() << std::endl;
-		raw_test.setRawBits(256);  // 1.0に相当
+		raw_test.setRawBits(256);
 		std::cout << "raw_test after setRawBits(256): " << raw_test << std::endl;
 		std::cout << "raw_test getRawBits: " << raw_test.getRawBits() << std::endl;
 	}

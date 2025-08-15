@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: toruinoue <toruinoue@student.42.fr>        +#+  +:+       +#+        */
+/*   By: torinoue <torinoue@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/11 19:48:06 by torinoue          #+#    #+#             */
-/*   Updated: 2025/08/15 12:46:14 by toruinoue        ###   ########.fr       */
+/*   Updated: 2025/08/15 17:20:23 by torinoue         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,11 +98,13 @@ void test_subject() {
 	std::cout << Fixed::max( a, b ) << std::endl;
 }
 
+// Fixed a(2898.31f);  // sqrt(MAX_SAFE_INT) + 1
+// Fixed b(2897.31f);  // sqrt(MAX_SAFE_INT)
 void test_arithmetic_operations() {
 	std::cout << "\n算術演算子のテスト:" << std::endl;
 
-	Fixed a(2898.31f);  // sqrt(MAX_SAFE_INT) + 1
-	Fixed b(2897.31f);  // sqrt(MAX_SAFE_INT)
+	Fixed a(2898.31f);
+	Fixed b(2897.31f);
 	Fixed c(5.25f);
 
 	std::cout << "a = sqrt(MAX_SAFE_INT) + 1 = " << a << std::endl;
@@ -143,53 +145,67 @@ void test_boundary_values() {
 	const float BOUNDARY = MIN_REPRESENTABLE / 2.0f;  // 0.001953125
 
 	std::cout << "最小表現可能値: " << MIN_REPRESENTABLE << std::endl;
-	std::cout << "境界値: " << BOUNDARY << std::endl;
+	std::cout << "境界値　　　　: " << BOUNDARY << std::endl;
+	std::cout << "境界値　　　　: 0.001953125 <-- ハードコーディングされた数字です" << std::endl;
 
 	float zero_rounded_max = BOUNDARY - 0.0000001f;  // 0.0019531149
 	std::cout << "\n1. ゼロに丸められる最大の値:" << std::endl;
-	std::cout << "入力値: " << zero_rounded_max << std::endl;
+	std::cout << "入力値　　　　: " << zero_rounded_max << std::endl;
+	std::cout << "入力値　　　　: 0.0019531149 <-- ハードコーディングされた数字です" << std::endl;
+	
 	Fixed zero_test(zero_rounded_max);
 	std::cout << "結果: " << zero_test << " (getRawBits = " << zero_test.getRawBits() << ")" << std::endl;
 
 	std::cout << "\n2. 最小値に丸められる最小の値（境界値ちょうど）:" << std::endl;
-	std::cout << "入力値: " << BOUNDARY << std::endl;
+	std::cout << "入力値　　　　: " << BOUNDARY << std::endl;
+	std::cout << "入力値　　　　: 0.001953125 <-- ハードコーディングされた数字です" << std::endl;
+
 	Fixed min_test(BOUNDARY);
 	std::cout << "結果: " << min_test << " (getRawBits = " << min_test.getRawBits() << ")" << std::endl;
 
 	float slightly_above = BOUNDARY + 0.0000001f;  // 0.0019531351
 	std::cout << "\n3. 境界値より少し大きい値:" << std::endl;
-	std::cout << "入力値: " << slightly_above << std::endl;
+	std::cout << "入力値　　　　: " << slightly_above << std::endl;
+	std::cout << "入力値　　　　: 0.0019531351 <-- ハードコーディングされた数字です" << std::endl;
+	
 	Fixed above_test(slightly_above);
 	std::cout << "結果: " << above_test << " (getRawBits = " << above_test.getRawBits() << ")" << std::endl;
 
 	if (min_test.getRawBits() != 0) {
 		std::cout << "\n4. 境界値での除算テスト:" << std::endl;
-		std::cout << "a / 境界値 = " << (Fixed(2898.31f) / min_test) << std::endl;
+		std::cout << "Fixed(2898.31f)  / 境界値 　= " << (Fixed(2898.31f) / min_test) << std::endl;
+		std::cout << "2898.31005859375F  / Fixed(0.001953125) <-- ハードコーディングされた数字です\n" << std::endl;
 	}
 	if (above_test.getRawBits() != 0) {
-		std::cout << "a / 境界値+ε = " << (Fixed(2898.31f) / above_test) << std::endl;
+		std::cout << "Fixed(2898.31f)  / 境界値+ε = " << (Fixed(2898.31f) / above_test) << std::endl;
+		std::cout << "2898.31005859375F  / Fixed(0.0019531351) <-- ハードコーディングされた数字です" << std::endl;
+
 	}
 
 	std::cout << "\n=== 数学的に正確な境界値テスト ===" << std::endl;
 
 	float precise_boundary_minus = 0.0019531249f;
-	float precise_boundary_plus = 0.0019531251f;
+	float precise_boundary_plus  = 0.0019531251f;
 
-	std::cout << "境界値の直前: " << precise_boundary_minus << std::endl;
-	std::cout << "境界値ちょうど: " << BOUNDARY << std::endl;
-	std::cout << "境界値の直後: " << precise_boundary_plus << std::endl;
-
+	std::cout << "境界値    　: 0.0019531250f <-- ハードコーディングされた数字です" << std::endl;
+	std::cout << "        ε　: 0.0000001f ≠ ULP (Unit in the Last Place)" << std::endl;
+	std::cout << "境界値 - ε　: " << precise_boundary_minus << std::endl;
+	std::cout << "境界値 - ε　: 0.0019531249f <-- ハードコーディングされた数字です" << std::endl;
 	Fixed precise_minus(precise_boundary_minus);
+	std::cout << "  境界値 - ε: " << precise_minus << " (getRawBits = " << precise_minus.getRawBits() << ")" << std::endl;
+	std::cout << std::endl;
+	
+	std::cout << "境界値ちょうど: " << BOUNDARY << std::endl;
+	std::cout << "境界値ちょうど: 0.001953125 <-- ハードコーディングされた数字です" << std::endl;
 	Fixed precise_exact(BOUNDARY);
-	Fixed precise_plus(precise_boundary_plus);
-
-	std::cout << "\n境界値-1ULP: " << precise_minus << " (getRawBits = " << precise_minus.getRawBits() << ")" << std::endl;
 	std::cout << "境界値ちょうど: " << precise_exact << " (getRawBits = " << precise_exact.getRawBits() << ")" << std::endl;
-	std::cout << "境界値+1ULP: " << precise_plus << " (getRawBits = " << precise_plus.getRawBits() << ")" << std::endl;
+	std::cout << std::endl;
 
-	float test_val = 1/256.0f - 0.001f;
-	std::cout << "test_val = " << test_val << std::endl;
-	std::cout << "a / test_val = " << (Fixed(2898.31f) / test_val) << std::endl;
+	std::cout << "境界値 + ε　: " << precise_boundary_plus << std::endl;
+	std::cout << "境界値 + ε　: 0.0019531251f <-- ハードコーディングされた数字です" << std::endl;
+	Fixed precise_plus(precise_boundary_plus);
+	std::cout << "境界値 + ε　: " << precise_plus << " (getRawBits = " << precise_plus.getRawBits() << ")" << std::endl;
+	std::cout << std::endl;
 }
 
 void test_overflow_cases() {
@@ -197,11 +213,8 @@ void test_overflow_cases() {
 
 	Fixed a(2898.31f);
 
-	std::cout << "ゼロ除算テスト:" << std::endl;
-	std::cout << "a / 0 = " << (a / 0) << std::endl;
-
 	std::cout << "\n大きな値のテスト:" << std::endl;
-	Fixed large1(32767.0f);  // 最大値に近い値
+	Fixed large1(32767.0f);
 	Fixed large2(32766.0f);
 
 	std::cout << "large1 = " << large1 << std::endl;
@@ -216,7 +229,10 @@ void test_overflow_cases() {
 	std::cout << "neg1 = " << neg1 << std::endl;
 	std::cout << "neg2 = " << neg2 << std::endl;
 	std::cout << "neg1 + neg2 = " << (neg1 + neg2) << std::endl;
-	std::cout << "neg1 * neg2 = " << (neg1 * neg2) << std::endl;
+	std::cout << "neg1 * neg2 =  " << (neg1 * neg2) << std::endl;
+	
+	std::cout << "ゼロ除算テスト:" << std::endl;
+	std::cout << "a / 0 = " << (a / 0) << std::endl;
 }
 
 void test_increment_decrement() {

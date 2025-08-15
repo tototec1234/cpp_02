@@ -6,7 +6,7 @@
 /*   By: torinoue <torinoue@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/11 19:48:18 by torinoue          #+#    #+#             */
-/*   Updated: 2025/08/15 14:59:27 by torinoue         ###   ########.fr       */
+/*   Updated: 2025/08/15 16:36:49 by torinoue         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,15 +45,17 @@ Fixed::Fixed(const int integer): _value(integer << _fractionalBits){
 	}
 }
 
-Fixed::Fixed(const float floatingPointNumber){
-	std::cerr << ANSI_COLOR_YELLOW << "Fixed Float Constructor called" << ANSI_COLOR_RESET << std::endl;
-	// std::cerr << ANSI_COLOR_YELLOW << "			floatingPointNumber=" << floatingPointNumber << ANSI_COLOR_RESET << std::endl;
-
-	// 最小表現可能値のチェック（丸め処理前）
+/*
 	const float MIN_REPRESENTABLE = 1.0f / (1 << _fractionalBits);  // 1/256 = 0.00390625
 	const float BOUNDARY = MIN_REPRESENTABLE / 2.0f;  // 0.00390625 / 2 = 0.00195312
+									exact value unaffected by std::cout = 0.001953125
+*/
+Fixed::Fixed(const float floatingPointNumber){
+	std::cerr << ANSI_COLOR_YELLOW << "Fixed Float Constructor called" << ANSI_COLOR_RESET << std::endl;
 
-	// 課題制約: std::abs使用不可のため、独自実装で絶対値計算
+	const float MIN_REPRESENTABLE = 1.0f / (1 << _fractionalBits);
+	const float BOUNDARY = MIN_REPRESENTABLE / 2.0f;
+
 	float abs_input = (floatingPointNumber < 0.0f) ? -floatingPointNumber : floatingPointNumber;
 
 	if (floatingPointNumber != 0.0f && abs_input < MIN_REPRESENTABLE) {
@@ -64,10 +66,10 @@ Fixed::Fixed(const float floatingPointNumber){
 
 		if (abs_input < BOUNDARY) {
 			std::cerr << "         Since |" << floatingPointNumber << "| < " << BOUNDARY 
-					  << " (boundary = " << MIN_REPRESENTABLE << " / 2), value will be rounded to 0." << ANSI_COLOR_RESET << std::endl;
+					  << " (boundary = " << MIN_REPRESENTABLE << " / 2  exact value unaffected by std::cout is 0.001953125), value will be rounded to 0." << ANSI_COLOR_RESET << std::endl;
 		} else {
 			std::cerr << "         Since |" << floatingPointNumber << "| >= " << BOUNDARY 
-					  << " (boundary = " << MIN_REPRESENTABLE << " / 2), value will be rounded to " 
+					  << " (boundary = " << MIN_REPRESENTABLE << " / 2 exact value unaffected by std::cout is 0.001953125), value will be rounded to " 
 					  << MIN_REPRESENTABLE << " (getRawBits = 1)." << ANSI_COLOR_RESET << std::endl;
 		}
 	}
@@ -112,7 +114,6 @@ Fixed &Fixed::operator=(const Fixed &src){
 	return *this;
 }
 
-// float	Fixed::toFloat(void) 
 float	Fixed::toFloat(void) const{
 	return (static_cast<float>(this->_value) / (1 << _fractionalBits));
 }

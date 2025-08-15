@@ -6,7 +6,7 @@
 /*   By: torinoue <torinoue@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/11 19:48:18 by torinoue          #+#    #+#             */
-/*   Updated: 2025/08/15 14:58:17 by torinoue         ###   ########.fr       */
+/*   Updated: 2025/08/15 16:36:35 by torinoue         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,17 +17,18 @@
 
 const int Fixed::_fractionalBits = 8;
 
+// std::cerr << ANSI_COLOR_YELLOW << "Fixed Default Constructor called" << ANSI_COLOR_RESET << std::endl;
 Fixed::Fixed() : _value(0){
-	// std::cerr << ANSI_COLOR_YELLOW << "Fixed Default Constructor called" << ANSI_COLOR_RESET << std::endl;
 }
 
+// std::cerr << ANSI_COLOR_YELLOW << "Fixed Copy Constructor called" << ANSI_COLOR_RESET << std::endl;
 Fixed::Fixed(const Fixed & src){
-	// std::cerr << ANSI_COLOR_YELLOW << "Fixed Copy Constructor called" << ANSI_COLOR_RESET << std::endl;
+
 	*this = src;
 }
 
+// std::cerr << ANSI_COLOR_YELLOW << "Fixed Integer Constructor called" << ANSI_COLOR_RESET << std::endl;
 Fixed::Fixed(const int integer): _value(integer << _fractionalBits){
-	// std::cerr << ANSI_COLOR_YELLOW << "Fixed Integer Constructor called" << ANSI_COLOR_RESET << std::endl;
 
 	const int MAX_SAFE_INT = INT_MAX / (1 << _fractionalBits);
 	const int MIN_SAFE_INT = INT_MIN / (1 << _fractionalBits);
@@ -44,12 +45,11 @@ Fixed::Fixed(const int integer): _value(integer << _fractionalBits){
 	}
 }
 
+// std::cerr << ANSI_COLOR_YELLOW << "Fixed Float Constructor called" << ANSI_COLOR_RESET << std::endl;
+// std::cerr << ANSI_COLOR_YELLOW << "			floatingPointNumber=" << floatingPointNumber << ANSI_COLOR_RESET << std::endl;
 Fixed::Fixed(const float floatingPointNumber){
-	// std::cerr << ANSI_COLOR_YELLOW << "Fixed Float Constructor called" << ANSI_COLOR_RESET << std::endl;
-	// std::cerr << ANSI_COLOR_YELLOW << "			floatingPointNumber=" << floatingPointNumber << ANSI_COLOR_RESET << std::endl;
-
-	const float MIN_REPRESENTABLE = 1.0f / (1 << _fractionalBits);  // 1/256 = 0.00390625
-	const float BOUNDARY = MIN_REPRESENTABLE / 2.0f;  // 0.00390625 / 2 = 0.00195312
+	const float MIN_REPRESENTABLE = 1.0f / (1 << _fractionalBits);
+	const float BOUNDARY = MIN_REPRESENTABLE / 2.0f;
 
 	float abs_input = (floatingPointNumber < 0.0f) ? -floatingPointNumber : floatingPointNumber;
 
@@ -61,10 +61,10 @@ Fixed::Fixed(const float floatingPointNumber){
 
 		if (abs_input < BOUNDARY) {
 			std::cerr << "         Since |" << floatingPointNumber << "| < " << BOUNDARY 
-					  << " (boundary = " << MIN_REPRESENTABLE << " / 2), value will be rounded to 0." << ANSI_COLOR_RESET << std::endl;
+					  << " (boundary = " << MIN_REPRESENTABLE << " / 2   exact value unaffected by std::cout is 0.001953125), \n          value will be rounded to 0." << ANSI_COLOR_RESET << std::endl;
 		} else {
 			std::cerr << "         Since |" << floatingPointNumber << "| >= " << BOUNDARY 
-					  << " (boundary = " << MIN_REPRESENTABLE << " / 2), value will be rounded to " 
+					  << " (boundary = " << MIN_REPRESENTABLE << " / 2   exact value unaffected by std::cout is 0.001953125),\n          value will be rounded to " 
 					  << MIN_REPRESENTABLE << " (getRawBits = 1)." << ANSI_COLOR_RESET << std::endl;
 		}
 	}
@@ -86,17 +86,17 @@ Fixed::Fixed(const float floatingPointNumber){
 	}
 }
 
+// std::cerr << ANSI_COLOR_RED << "Fixed Destructor called" << ANSI_COLOR_RESET << std::endl;
 Fixed::~Fixed(){
-	// std::cerr << ANSI_COLOR_RED << "Fixed Destructor called" << ANSI_COLOR_RESET << std::endl;
 }
 
+// std::cout << ANSI_COLOR_BLUE << "getRawBits member function called" << ANSI_COLOR_RESET << std::endl;
 int Fixed::getRawBits( void ) const{
-	// std::cout << ANSI_COLOR_BLUE << "getRawBits member function called" << ANSI_COLOR_RESET << std::endl;
 	return (this->_value);
 }
 
+// std::cout << "setRawBits member function called" << std::endl;
 void Fixed::setRawBits( int const raw ){
-	// std::cout << "setRawBits member function called" << std::endl;
 	this->_value = raw;
 }
 
@@ -115,10 +115,8 @@ const Fixed &Fixed::max(const Fixed &a, const Fixed &b){
 	return (a._value < b._value ? b : a);
 }
 
-// Overloaded Operators
-	/* Assignment operator */
+// std::cout << ANSI_COLOR_YELLOW << "Fixed Copy Assignment Operator called" << ANSI_COLOR_RESET << std::endl;
 Fixed &Fixed::operator =(const Fixed &src){
-	// std::cout << ANSI_COLOR_YELLOW << "Fixed Copy Assignment Operator called" << ANSI_COLOR_RESET << std::endl;
 	if (this != &src)
 	{
 		this->_value = src.getRawBits();
@@ -126,7 +124,6 @@ Fixed &Fixed::operator =(const Fixed &src){
 	return *this;
 }
 
-// float	Fixed::toFloat(void) 
 float	Fixed::toFloat(void) const{
 	return (static_cast<float>(this->_value) / (1 << _fractionalBits));
 }
@@ -267,31 +264,32 @@ Fixed	Fixed::operator /(const Fixed &other) const{
 	return result;
 }
 
+
 /* The 4 increment/decrement (pre-increment and post-increment, pre-decrement and
 post-decrement) operators, which will increase or decrease the fixed-point value by
 the smallest representable ϵ, such that 1 + ϵ > 1. */
 
+// std::cout << ANSI_COLOR_YELLOW << "Fixed Pre-Increment Operator called" << ANSI_COLOR_RESET << std::endl;
 Fixed	&Fixed::operator ++(void){
-	// std::cout << ANSI_COLOR_YELLOW << "Fixed Pre-Increment Operator called" << ANSI_COLOR_RESET << std::endl;
 	this->_value++;
 	return (*this);
 }
 
+// std::cout << ANSI_COLOR_YELLOW << "Fixed Post-Increment Operator called" << ANSI_COLOR_RESET << std::endl;
 Fixed	Fixed::operator ++(int){
-	// std::cout << ANSI_COLOR_YELLOW << "Fixed Post-Increment Operator called" << ANSI_COLOR_RESET << std::endl;
 	Fixed temp(*this);
 	this->_value++;
 	return (temp);
 }
 
+// std::cout << ANSI_COLOR_YELLOW << "Fixed Pre-Decrement Operator called" << ANSI_COLOR_RESET << std::endl;
 Fixed	&Fixed::operator --(void){
-	// std::cout << ANSI_COLOR_YELLOW << "Fixed Pre-Decrement Operator called" << ANSI_COLOR_RESET << std::endl;
 	this->_value--;
 	return (*this);
 }
 
+// std::cout << ANSI_COLOR_YELLOW << "Fixed Post-Decrement Operator called" << ANSI_COLOR_RESET << std::endl;
 Fixed	Fixed::operator --(int){
-	// std::cout << ANSI_COLOR_YELLOW << "Fixed Post-Decrement Operator called" << ANSI_COLOR_RESET << std::endl;
 	Fixed temp(*this);
 	this->_value--;
 	return (temp);

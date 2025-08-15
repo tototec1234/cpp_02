@@ -218,9 +218,15 @@ void test_overflow_cases() {
 	Fixed large2(32766.0f);
 
 	std::cout << "large1 = " << large1 << std::endl;
+	std::cout << "  getRawBits: " << large1.getRawBits() << std::endl;
 	std::cout << "large2 = " << large2 << std::endl;
+	std::cout << "  getRawBits: " << large2.getRawBits() << std::endl;
 	std::cout << "large1 + large2 = " << (large1 + large2) << std::endl;
+	std::cout << "  getRawBits: " << (large1 + large2).getRawBits() << std::endl;
+	std::cout << "large1 * large1 = " << (large1 * large1) << std::endl;
+	std::cout << "  getRawBits: " << (large1 * large1).getRawBits() << std::endl;
 	std::cout << "large1 * large2 = " << (large1 * large2) << std::endl;
+	std::cout << "  getRawBits: " << (large1 * large2).getRawBits() << std::endl;
 
 	std::cout << "\n負の値のテスト:" << std::endl;
 	Fixed neg1(-32767.0f);
